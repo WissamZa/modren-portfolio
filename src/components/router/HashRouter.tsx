@@ -6,8 +6,12 @@ import { AuthProvider, useAuth } from '../../contexts/AuthContext';
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
 import HomePage from '../../pages/public/HomePage';
+import AboutPage from '../../pages/public/AboutPage';
 import ProjectsPage from '../../pages/public/ProjectsPage';
 import ContactPage from '../../pages/public/ContactPage';
+import LoginPage from '../../pages/auth/LoginPage';
+import SignupPage from '../../pages/auth/SignupPage';
+import AdminDashboard from '../../pages/admin/AdminDashboard';
 
 // Layout component
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -54,8 +58,21 @@ function AppRouter() {
           <Layout>
             <Routes>
               <Route path="/" element={<HomePage />} />
+              <Route path="/about" element={<AboutPage />} />
               <Route path="/projects" element={<ProjectsPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignupPage />} />
+              
+              {/* Protected Admin Routes */}
+              <Route 
+                path="/admin" 
+                element={
+                  <ProtectedRoute adminOnly>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                } 
+              />
               
               {/* Fallback route */}
               <Route path="*" element={<Navigate to="/" replace />} />

@@ -46,10 +46,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return;
     }
 
-    // Check if user is admin - you can implement your own logic here
-    // For now, we'll check if the user email is in an admin list
-    const adminEmails = ['admin@example.com']; // Configure this
-    setIsAdmin(adminEmails.includes(user.email || ''));
+    // For demo purposes, make all authenticated users admin
+    // In production, you would check against a database or user metadata
+    setIsAdmin(true);
   };
 
   const signIn = async (email: string, password: string) => {
