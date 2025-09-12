@@ -25,40 +25,62 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const checkAdminStatus = (user: User | null) => {
+    // For demo: all authenticated users are admins
+    // In production: query a `users` table or check `app_metadata.role`
+    setIsAdmin(!!user); // or more robust logic like: user?.app_metadata?.role === 'admin'
+  };
+
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const initializeAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      // Fix: Convert undefined to null using nullish coalescing
       setUser(session?.user ?? null);
-      checkAdminStatus(session?.user);
+      checkAdminStatus(session?.user ?? null); // Fixed: Convert undefined to null
       setLoading(false);
-    });
+    };
+
+    initializeAuth();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      // Fix: Convert undefined to null using nullish coalescing
       setUser(session?.user ?? null);
-      checkAdminStatus(session?.user);
+      checkAdminStatus(session?.user ?? null); // Fixed: Convert undefined to null
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  const checkAdminStatus = async (user: User | null) => {
-    if (!user) {
-      setIsAdmin(false);
-      return;
-    }
-
-    // For demo purposes, make all authenticated users admin
-    // In production, you would check against a database or user metadata
-    setIsAdmin(true);
-  };
-
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
+
+    // Poll getSession() until user is available (max 3s timeout)
+    const maxRetries = 15; // ~3 seconds at 200ms intervals
+    let retries = 0;
+
+    while (retries < maxRetries) {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUser(session.user);
+        checkAdminStatus(session.user);
+        return; // Success!
+      }
+      await new Promise(resolve => setTimeout(resolve, 200));
+      retries++;
+    }
+
+    // Fallback: if still no session, assume something went wrong
+    throw new Error('Failed to establish session after sign-in');
   };
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
+
+    // Immediately reset local state on sign-out
+    setUser(null);
+    setIsAdmin(false);
   };
 
   return (

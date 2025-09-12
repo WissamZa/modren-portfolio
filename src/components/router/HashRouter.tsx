@@ -10,7 +10,6 @@ import AboutPage from '../../pages/public/AboutPage';
 import ProjectsPage from '../../pages/public/ProjectsPage';
 import ContactPage from '../../pages/public/ContactPage';
 import LoginPage from '../../pages/auth/LoginPage';
-import SignupPage from '../../pages/auth/SignupPage';
 import AdminDashboard from '../../pages/admin/AdminDashboard';
 
 // Layout component
@@ -62,7 +61,6 @@ function AppRouter() {
               <Route path="/projects" element={<ProjectsPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignupPage />} />
               
               {/* Protected Admin Routes */}
               <Route 
