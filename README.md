@@ -72,12 +72,14 @@ npm run dev
    - Add these secrets:
      - `VITE_SUPABASE_URL`: Your Supabase project URL
      - `VITE_SUPABASE_ANON_KEY`: Your Supabase anon key
-
-3. **Enable GitHub Pages**:
+3. **Add user for Authentication in supabase to sign in**
+   - Sign in in supabase and choose your project
+   - Go to Authentication and create new user
+5. **Enable GitHub Pages**:
    - Go to Settings → Pages
    - Source: "GitHub Actions"
 
-4. **Push to main branch**:
+6. **Push to main branch**:
    ```bash
    git add .
    git commit -m "Deploy to GitHub Pages"
