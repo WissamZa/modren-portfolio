@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion ,Variants} from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Download, Github, Linkedin } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
@@ -10,12 +10,12 @@ const HomePage: React.FC = () => {
   const [heroRef, heroInView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [featuresRef, featuresInView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
-  const fadeInUp = {
+  const fadeInUp : Variants = {
     hidden: { opacity: 0, y: 60 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } }
   };
 
-  const staggerChildren = {
+  const staggerChildren:Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -144,7 +144,7 @@ const HomePage: React.FC = () => {
               variants={staggerChildren}
               className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4"
             >
-              {skills.map((skill, index) => (
+              {skills.map((skill) => (
                 <motion.div
                   key={skill}
                   variants={fadeInUp}

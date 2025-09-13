@@ -1,13 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Twitter, Mail, Heart } from 'lucide-react';
+import { Github, Linkedin, Mail, Heart } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const socialLinks = [
-    { icon: Github, href: 'https://github.com', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
-    { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
-    { icon: Mail, href: 'mailto:hello@portfolio.com', label: 'Email' }
+    { icon: Github, href: 'https://github.com/WissamZa', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/wissam-zaidi', label: 'LinkedIn' },
+    { icon: Mail, href: 'mailto:wissam_zaidi@proton.me', label: 'Email' }
   ];
 
   return (
@@ -70,7 +69,7 @@ const Footer: React.FC = () => {
         <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-600 dark:text-gray-400 text-sm flex items-center space-x-1">
-              <span>© 2024 Portfolio. Made with</span>
+              <span>© 2025 Portfolio. Made with</span>
               <Heart className="w-4 h-4 text-red-500" />
               <span>and React</span>
             </p>
