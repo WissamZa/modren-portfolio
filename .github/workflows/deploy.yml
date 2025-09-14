@@ -1,11 +1,10 @@
-name: CI/CD - Test on Develop, Deploy on Main for Github Pages
-
+name: CI/CD - Test on Develop, Deploy on Main via PR
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ develop ]  # Only allow push to develop, not main
   pull_request:
-    branches: [ develop ]
+    branches: [ develop, main ]  # Trigger on PRs to either
 
 permissions:
   contents: read
@@ -16,7 +15,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     name: Run Tests and Lint (Develop Branch)
-    if: github.ref == 'refs/heads/develop' || github.event_name == 'pull_request'
+    if: |
+      github.event_name == 'push' && github.ref == 'refs/heads/develop' ||
+      github.event_name == 'pull_request' && github.base_ref == 'develop'
 
     steps:
       - name: Checkout code
@@ -42,9 +43,12 @@ jobs:
 
   build-and-deploy:
     runs-on: ubuntu-latest
-    name: Build and Deploy to GitHub Pages (Main Branch)
-    if: github.ref == 'refs/heads/main'
-    needs: test
+    name: Build and Deploy to GitHub Pages (Main Branch via PR from develop)
+    if: |
+      github.event_name == 'pull_request' &&
+      github.base_ref == 'main' &&
+      github.head_ref == 'develop'
+    needs: test  # Wait for test job to pass (if it ran)
 
     steps:
       - name: Checkout code
