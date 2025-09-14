@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { 
   BarChart3, 
   Users, 
@@ -11,13 +12,22 @@ import {
   Edit,
   Trash2
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { useProjects } from '../../hooks/useProjects';
+import { Project } from '../../types';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
+import ProjectForm from '../../components/admin/ProjectForm';
+import ProjectList from '../../components/admin/ProjectList';
+import ProjectView from '../../components/admin/ProjectView';
 
 const AdminDashboard: React.FC = () => {
-  const { projects, loading } = useProjects();
+  const { projects, loading, createProject, updateProject, deleteProject } = useProjects();
   const [activeTab, setActiveTab] = useState('overview');
+  const [showProjectForm, setShowProjectForm] = useState(false);
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [viewingProject, setViewingProject] = useState<Project | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const stats = [
     { icon: FolderOpen, label: 'Total Projects', value: projects.length, color: 'blue' },
@@ -34,6 +44,51 @@ const AdminDashboard: React.FC = () => {
   ];
 
   const recentProjects = projects.slice(0, 5);
+
+  const handleCreateProject = () => {
+    setEditingProject(null);
+    setShowProjectForm(true);
+  };
+
+  const handleEditProject = (project: Project) => {
+    setEditingProject(project);
+    setShowProjectForm(true);
+    setViewingProject(null);
+  };
+
+  const handleViewProject = (project: Project) => {
+    setViewingProject(project);
+  };
+
+  const handleDeleteProject = async (id: string) => {
+    try {
+      await deleteProject(id);
+    } catch (error) {
+      console.error('Error deleting project:', error);
+    }
+  };
+
+  const handleProjectSubmit = async (data: Omit<Project, 'id' | 'created_at' | 'updated_at'>) => {
+    setIsSubmitting(true);
+    try {
+      if (editingProject) {
+        await updateProject(editingProject.id, data);
+      } else {
+        await createProject(data);
+      }
+      setShowProjectForm(false);
+      setEditingProject(null);
+    } catch (error) {
+      console.error('Error saving project:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleFormCancel = () => {
+    setShowProjectForm(false);
+    setEditingProject(null);
+  };
 
   return (
     <div className="min-h-screen pt-20 bg-gray-50 dark:bg-gray-900">
@@ -121,7 +176,7 @@ const AdminDashboard: React.FC = () => {
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                   Recent Projects
                 </h2>
-                <Button size="sm">
+                <Button size="sm" onClick={handleCreateProject}>
                   <Plus className="w-4 h-4 mr-2" />
                   Add Project
                 </Button>
@@ -197,17 +252,19 @@ const AdminDashboard: React.FC = () => {
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                 Manage Projects
               </h2>
-              <Button>
+              <Button onClick={handleCreateProject}>
                 <Plus className="w-4 h-4 mr-2" />
                 Add New Project
               </Button>
             </div>
 
-            <Card className="p-6">
-              <p className="text-gray-600 dark:text-gray-400">
-                Project management interface will be implemented here.
-              </p>
-            </Card>
+            <ProjectList
+              projects={projects}
+              loading={loading}
+              onEdit={handleEditProject}
+              onDelete={handleDeleteProject}
+              onView={handleViewProject}
+            />
           </motion.div>
         )}
 
@@ -249,6 +306,29 @@ const AdminDashboard: React.FC = () => {
           </motion.div>
         )}
       </div>
+
+      {/* Project Form Modal */}
+      <AnimatePresence>
+        {showProjectForm && (
+          <ProjectForm
+            project={editingProject || undefined}
+            onSubmit={handleProjectSubmit}
+            onCancel={handleFormCancel}
+            isSubmitting={isSubmitting}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Project View Modal */}
+      <AnimatePresence>
+        {viewingProject && (
+          <ProjectView
+            project={viewingProject}
+            onClose={() => setViewingProject(null)}
+            onEdit={() => handleEditProject(viewingProject)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };
