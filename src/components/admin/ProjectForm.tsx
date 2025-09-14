@@ -112,6 +112,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
         setImagePreview(watchImageUrl);
       } catch (err) {
         setImagePreview('');
+        console.error('Error :', err);
       }
     } else {
       setImagePreview('');

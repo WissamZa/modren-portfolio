@@ -1,26 +1,14 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User } from '@supabase/supabase-js';
+// src/contexts/AuthContext.tsx
+import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { AuthContext} from './auth-utils';
+import { User } from '@supabase/supabase-js';
 
-interface AuthContextType {
-  user: User | null;
-  isAdmin: boolean;
-  loading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
-  signOut: () => Promise<void>;
+interface AuthProviderProps {
+  children: React.ReactNode;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
-
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -34,18 +22,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const initializeAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      // Fix: Convert undefined to null using nullish coalescing
       setUser(session?.user ?? null);
-      checkAdminStatus(session?.user ?? null); // Fixed: Convert undefined to null
+      checkAdminStatus(session?.user ?? null);
       setLoading(false);
     };
 
     initializeAuth();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      // Fix: Convert undefined to null using nullish coalescing
       setUser(session?.user ?? null);
-      checkAdminStatus(session?.user ?? null); // Fixed: Convert undefined to null
+      checkAdminStatus(session?.user ?? null);
     });
 
     return () => subscription.unsubscribe();
@@ -55,7 +41,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
 
-    // Poll getSession() until user is available (max 3s timeout)
     const maxRetries = 15; // ~3 seconds at 200ms intervals
     let retries = 0;
 
@@ -64,13 +49,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (session?.user) {
         setUser(session.user);
         checkAdminStatus(session.user);
-        return; // Success!
+        return;
       }
       await new Promise(resolve => setTimeout(resolve, 200));
       retries++;
     }
 
-    // Fallback: if still no session, assume something went wrong
     throw new Error('Failed to establish session after sign-in');
   };
 
@@ -78,7 +62,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
 
-    // Immediately reset local state on sign-out
     setUser(null);
     setIsAdmin(false);
   };
