@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { 
   BarChart3, 
   Users, 
@@ -7,17 +8,22 @@ import {
   MessageSquare, 
   Settings,
   Plus,
-  Eye,
-  Edit,
-  Trash2
 } from 'lucide-react';
 import { useProjects } from '../../hooks/useProjects';
+import { Project } from '../../types';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
+import ProjectForm from '../../components/admin/ProjectForm';
+import ProjectList from '../../components/admin/ProjectList';
+import ProjectView from '../../components/admin/ProjectView';
 
 const AdminDashboard: React.FC = () => {
-  const { projects, loading } = useProjects();
+  const { projects, loading, createProject, updateProject, deleteProject } = useProjects();
   const [activeTab, setActiveTab] = useState('overview');
+  const [showProjectForm, setShowProjectForm] = useState(false);
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [viewingProject, setViewingProject] = useState<Project | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const stats = [
     { icon: FolderOpen, label: 'Total Projects', value: projects.length, color: 'blue' },
@@ -33,7 +39,52 @@ const AdminDashboard: React.FC = () => {
     { id: 'settings', label: 'Settings', icon: Settings }
   ];
 
-  const recentProjects = projects.slice(0, 5);
+  
+
+  const handleCreateProject = () => {
+    setEditingProject(null);
+    setShowProjectForm(true);
+  };
+
+  const handleEditProject = (project: Project) => {
+    setEditingProject(project);
+    setShowProjectForm(true);
+    setViewingProject(null);
+  };
+
+  const handleViewProject = (project: Project) => {
+    setViewingProject(project);
+  };
+
+  const handleDeleteProject = async (id: string) => {
+    try {
+      await deleteProject(id);
+    } catch (error) {
+      console.error('Error deleting project:', error);
+    }
+  };
+
+  const handleProjectSubmit = async (data: Omit<Project, 'id' | 'created_at' | 'updated_at'>) => {
+    setIsSubmitting(true);
+    try {
+      if (editingProject) {
+        await updateProject(editingProject.id, data);
+      } else {
+        await createProject(data);
+      }
+      setShowProjectForm(false);
+      setEditingProject(null);
+    } catch (error) {
+      console.error('Error saving project:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleFormCancel = () => {
+    setShowProjectForm(false);
+    setEditingProject(null);
+  };
 
   return (
     <div className="min-h-screen pt-20 bg-gray-50 dark:bg-gray-900">
@@ -121,67 +172,15 @@ const AdminDashboard: React.FC = () => {
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                   Recent Projects
                 </h2>
-                <Button size="sm">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Project
-                </Button>
               </div>
 
-              {loading ? (
-                <div className="space-y-4">
-                  {[...Array(3)].map((_, i) => (
-                    <div key={i} className="animate-pulse flex items-center space-x-4">
-                      <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-                      <div className="flex-1 space-y-2">
-                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
-                        <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {recentProjects.map((project) => (
-                    <div
-                      key={project.id}
-                      className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                    >
-                      <div className="flex items-center space-x-4">
-                        {project.image_url ? (
-                          <img
-                            src={project.image_url}
-                            alt={project.title}
-                            className="w-16 h-16 object-cover rounded-lg"
-                          />
-                        ) : (
-                          <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                            <FolderOpen className="w-8 h-8 text-gray-400" />
-                          </div>
-                        )}
-                        <div>
-                          <h3 className="font-semibold text-gray-900 dark:text-white">
-                            {project.title}
-                          </h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">
-                            {project.category} • {new Date(project.created_at).toLocaleDateString()}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Button size="sm" variant="ghost">
-                          <Eye className="w-4 h-4" />
-                        </Button>
-                        <Button size="sm" variant="ghost">
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button size="sm" variant="ghost">
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+              <ProjectList
+              projects={projects.slice(-3)}
+              loading={loading}
+              onEdit={handleEditProject}
+              onDelete={handleDeleteProject}
+              onView={handleViewProject}
+            />
             </Card>
           </motion.div>
         )}
@@ -197,17 +196,19 @@ const AdminDashboard: React.FC = () => {
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                 Manage Projects
               </h2>
-              <Button>
+              <Button onClick={handleCreateProject}>
                 <Plus className="w-4 h-4 mr-2" />
                 Add New Project
               </Button>
             </div>
 
-            <Card className="p-6">
-              <p className="text-gray-600 dark:text-gray-400">
-                Project management interface will be implemented here.
-              </p>
-            </Card>
+            <ProjectList
+              projects={projects}
+              loading={loading}
+              onEdit={handleEditProject}
+              onDelete={handleDeleteProject}
+              onView={handleViewProject}
+            />
           </motion.div>
         )}
 
@@ -249,6 +250,29 @@ const AdminDashboard: React.FC = () => {
           </motion.div>
         )}
       </div>
+
+      {/* Project Form Modal */}
+      <AnimatePresence>
+        {showProjectForm && (
+          <ProjectForm
+            project={editingProject || undefined}
+            onSubmit={handleProjectSubmit}
+            onCancel={handleFormCancel}
+            isSubmitting={isSubmitting}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Project View Modal */}
+      <AnimatePresence>
+        {viewingProject && (
+          <ProjectView
+            project={viewingProject}
+            onClose={() => setViewingProject(null)}
+            onEdit={() => handleEditProject(viewingProject)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

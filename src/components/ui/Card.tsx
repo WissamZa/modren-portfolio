@@ -21,10 +21,7 @@ const Card: React.FC<CardProps> = ({
   return (
     <motion.div
       whileHover={hoverable ? { y: -4, scale: 1.02 } : {}}
-      className={`
-        rounded-xl shadow-lg transition-all duration-300
-        ${baseClasses}
-        ${hoverable ? 'hover:shadow-2xl cursor-pointer' : ''}
+      className={`rounded-xl shadow-lg transition-all duration-300 ${baseClasses} ${hoverable ? 'hover:shadow-2xl cursor-pointer' : ''}
         ${className}
       `}
     >
