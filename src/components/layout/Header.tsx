@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Moon, Sun, Menu, X, User, LogOut } from 'lucide-react';
-import { useTheme } from '../../contexts/ThemeContext';
-import { useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/theme-utils';
+import { useAuth } from '../../contexts/auth-utils';  
 import Button from '../ui/Button';
 
 const Header: React.FC = () => {

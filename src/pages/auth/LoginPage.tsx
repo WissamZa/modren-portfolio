@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Eye, EyeOff, Mail, Lock, LogIn } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/auth-utils';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
@@ -35,8 +35,15 @@ const LoginPage: React.FC = () => {
       await signIn(data.email, data.password);
       toast.success('Welcome back!');
       navigate('/');
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to sign in');
+    } catch (err) {
+      // 👇 Safe, typed, no 'any' — handles all possible error shapes
+      const errorMessage = err instanceof Error 
+        ? err.message 
+        : typeof err === 'string' 
+          ? err 
+          : 'Failed to sign in';
+  
+      toast.error(errorMessage);
     }
   };
 
