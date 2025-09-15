@@ -49,19 +49,19 @@ const ContactPage: React.FC = () => {
     {
       icon: MapPin,
       title: 'Location',
-      value: 'San Francisco, CA',
+      value: 'Riyadh, SA',
       description: 'Available for remote work worldwide'
     },
     {
       icon: Phone,
       title: 'Phone',
-      value: '+1 (555) 123-4567',
-      description: 'Mon-Fri from 8am to 5pm PST'
+      value: '+9665xxxxxxx',
+      description: 'Sun-Thu from 8am to 5pm UTC+03:00'
     },
     {
       icon: Mail,
       title: 'Email',
-      value: 'hello@portfolio.com',
+      value: 'wissam.zaidi15@gmail.com',
       description: 'Send me an email anytime!'
     },
     {
@@ -113,7 +113,7 @@ const ContactPage: React.FC = () => {
                   <Input
                     label="Email Address"
                     type="email"
-                    placeholder="john@example.com"
+                    placeholder="info@example.com"
                     error={errors.email?.message}
                     {...register('email')}
                   />
@@ -213,7 +213,7 @@ const ContactPage: React.FC = () => {
               <div className="text-center py-12">
                 <MapPin className="w-16 h-16 text-blue-600 dark:text-blue-400 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  Based in San Francisco
+                  Riyadh in saudi Arabia
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300">
                   Available for remote work and local meetups
