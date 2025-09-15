@@ -35,7 +35,7 @@ const Footer: React.FC = () => {
               {['Home', 'About', 'Projects', 'Contact'].map((item) => (
                 <li key={item}>
                   <a
-                    href={`/${item.toLowerCase()}`}
+                    href={`/modren-portfolio/#/${item.toLowerCase()}`}
                     className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
                   >
                     {item}
