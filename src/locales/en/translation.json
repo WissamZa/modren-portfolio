@@ -1,0 +1,31 @@
+{
+  "title": "Portfolio",
+  "header": {
+    "nav": {
+      "home": "Home",
+      "about": "About",
+      "projects": "Projects",
+      "contact": "Contact"
+    },
+    "auth": {
+      "signIn": "Sign In",
+      "signOut": "Sign Out"
+    }
+  },
+  "footer": {
+    "description": "Crafting digital experiences with modern technologies and creative solutions.",
+    "socialLinks": {
+      "github": "GitHub",
+      "linkedin": "LinkedIn",
+      "email": "Email"
+    },
+    "quick_links": "Quick Links",
+    "Connect": "Connect",
+    "navigation": {
+      "home": "Home",
+      "about": "About",
+      "projects": "Projects",
+      "contact": "Contact"
+    }
+  }
+}

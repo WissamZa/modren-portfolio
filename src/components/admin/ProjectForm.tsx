@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { X, Upload, Link as LinkIcon, Github, ExternalLink } from 'lucide-react';
-import { Project } from '../../types';
+import { Project } from '../../types/index';
 import Input from '../ui/Input';
 import Button from '../ui/Button';
 import Card from '../ui/Card';
