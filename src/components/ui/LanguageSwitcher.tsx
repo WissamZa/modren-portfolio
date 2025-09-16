@@ -11,10 +11,9 @@ const languages = [
 ];
 
 const LanguageSwitcher: React.FC = () => {
-  const { i18n } = useTranslation(); // ✅ This is good — it subscribes to language changes
+  const { i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
-  // 👇 This ensures reactivity — useMemo depends on i18n.language
   const currentLanguage = useMemo(() => {
     return languages.find(lang => lang.code === i18n.language) || languages[0];
   }, [i18n.language]);
@@ -22,22 +21,32 @@ const LanguageSwitcher: React.FC = () => {
   const isRTL = i18n.language === 'ar';
 
   const handleLanguageChange = (languageCode: string) => {
-    console.log('Changing language to:', languageCode); // 👈 Debug log
+    console.log('Changing language to:', languageCode);
     i18n.changeLanguage(languageCode);
     setIsOpen(false);
   };
+
+  // 👇 BEST PRACTICE: Use i18next event listener
   useEffect(() => {
-    const htmlElement = document.documentElement;
+    const updateHtmlAttributes = () => {
+      const htmlElement = document.documentElement;
+      htmlElement.lang = i18n.language;
+      htmlElement.dir = i18n.dir();
+      console.log(`🌐 HTML lang="${htmlElement.lang}" dir="${htmlElement.dir}"`);
+    };
 
-    // Set language
-    htmlElement.lang = i18n.language;
+    // Set initial values
+    updateHtmlAttributes();
 
-    // Set direction (rtl for Arabic, ltr otherwise)
-    htmlElement.dir = i18n.dir(); // i18next provides .dir() helper
+    // Listen for language changes
+    i18n.on('languageChanged', updateHtmlAttributes);
 
-    // Optional: Log for debugging
-    console.log(`🌐 HTML lang="${htmlElement.lang}" dir="${htmlElement.dir}"`);
-  }, [i18n.language]); // Re-run when language changes
+    // Cleanup
+    return () => {
+      i18n.off('languageChanged', updateHtmlAttributes);
+    };
+  }, [i18n]); // ✅ Safe — i18n is stable
+
   return (
     <div className="relative" dir={isRTL ? 'rtl' : 'ltr'}>
       <Button
@@ -47,9 +56,8 @@ const LanguageSwitcher: React.FC = () => {
         className="flex items-center space-x-2 p-2"
         aria-label="Change language"
       >
-        {/* 👇 Add key={i18n.language} to force re-render */}
         <ReactCountryFlag
-          key={i18n.language} // ← This ensures flag updates
+          key={i18n.language}
           countryCode={currentLanguage.country_code}
           svg
           style={{
@@ -65,7 +73,6 @@ const LanguageSwitcher: React.FC = () => {
           className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           style={{ transform: isRTL && isOpen ? 'rotate(180deg) scaleX(-1)' : undefined }}
         />
-        
       </Button>
 
       <AnimatePresence>
