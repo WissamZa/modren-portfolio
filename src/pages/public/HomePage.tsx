@@ -1,12 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ArrowRight, Download, Github, Linkedin } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
 
 const HomePage: React.FC = () => {
+  const { t } = useTranslation();
   const [heroRef, heroInView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [featuresRef, featuresInView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
@@ -73,10 +75,10 @@ const HomePage: React.FC = () => {
                 transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
                 style={{ backgroundSize: '200%' }}
               >
-                Creative Developer
+                {t('home.heroTitle')}
               </motion.h1>
               <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                Transforming ideas into exceptional digital experiences with modern technologies and innovative solutions.
+                {t('home.heroSubtitle')}
               </p>
             </motion.div>
 
@@ -86,13 +88,13 @@ const HomePage: React.FC = () => {
             >
               <Link to="/projects">
                 <Button size="lg" className="group">
-                  View My Work
+                  {t('home.viewMyWork')}
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
               <Button variant="secondary" size="lg" className="group">
                 <Download className="w-5 h-5 mr-2" />
-                Download Resume
+                {t('common.downloadResume')}
               </Button>
             </motion.div>
 
@@ -133,10 +135,10 @@ const HomePage: React.FC = () => {
           >
             <motion.div variants={fadeInUp} className="space-y-4">
               <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
-                Technologies I Work With
+                {t('home.skillsTitle')}
               </h2>
               <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                Leveraging cutting-edge technologies to build scalable, performant, and user-friendly applications.
+                {t('home.skillsSubtitle')}
               </p>
             </motion.div>
 

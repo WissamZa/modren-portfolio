@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -10,13 +11,6 @@ import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
 import { supabase } from '../../lib/supabase';
 
-const schema = yup.object().shape({
-  name: yup.string().required('Name is required').min(2, 'Name must be at least 2 characters'),
-  email: yup.string().required('Email is required').email('Invalid email address'),
-  subject: yup.string().required('Subject is required'),
-  message: yup.string().required('Message is required').min(10, 'Message must be at least 10 characters')
-});
-
 interface ContactFormData {
   name: string;
   email: string;
@@ -25,6 +19,15 @@ interface ContactFormData {
 }
 
 const ContactPage: React.FC = () => {
+  const { t } = useTranslation();
+  
+  const schema = yup.object().shape({
+    name: yup.string().required(t('validation.required')).min(2, t('validation.nameMin')),
+    email: yup.string().required(t('validation.required')).email(t('validation.email')),
+    subject: yup.string().required(t('validation.required')),
+    message: yup.string().required(t('validation.required')).min(10, t('validation.messageMin'))
+  });
+
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<ContactFormData>({
     resolver: yupResolver(schema)
   });
@@ -37,38 +40,38 @@ const ContactPage: React.FC = () => {
 
       if (error) throw error;
 
-      toast.success('Message sent successfully! I\'ll get back to you soon.');
+      toast.success(t('contact.success'));
       reset();
     } catch (error) {
       console.error('Error sending message:', error);
-      toast.error('Failed to send message. Please try again.');
+      toast.error(t('contact.error'));
     }
   };
 
   const contactInfo = [
     {
       icon: MapPin,
-      title: 'Location',
-      value: 'San Francisco, CA',
-      description: 'Available for remote work worldwide'
+      title: t('contact.info.location'),
+      value: t('contact.info.locationValue'),
+      description: t('contact.info.locationDesc')
     },
     {
       icon: Phone,
-      title: 'Phone',
-      value: '+1 (555) 123-4567',
-      description: 'Mon-Fri from 8am to 5pm PST'
+      title: t('contact.info.phone'),
+      value: t('contact.info.phoneValue'),
+      description: t('contact.info.phoneDesc')
     },
     {
       icon: Mail,
-      title: 'Email',
-      value: 'hello@portfolio.com',
-      description: 'Send me an email anytime!'
+      title: t('contact.info.email'),
+      value: t('contact.info.emailValue'),
+      description: t('contact.info.emailDesc')
     },
     {
       icon: Clock,
-      title: 'Response Time',
-      value: '24 hours',
-      description: 'Average response time'
+      title: t('contact.info.responseTime'),
+      value: t('contact.info.responseTimeValue'),
+      description: t('contact.info.responseTimeDesc')
     }
   ];
 
@@ -82,11 +85,10 @@ const ContactPage: React.FC = () => {
           className="text-center space-y-8 mb-16"
         >
           <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Get In Touch
+            {t('contact.title')}
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Have a project in mind or just want to chat? I'd love to hear from you. 
-            Send me a message and I'll respond as soon as possible.
+            {t('contact.subtitle')}
           </p>
         </motion.div>
 
@@ -176,10 +178,10 @@ const ContactPage: React.FC = () => {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                 Contact Information
-              </h2>
+                {t('contact.info.basedIn')}
               <p className="text-gray-600 dark:text-gray-300 mb-8">
                 Feel free to reach out through any of these channels. I'm always 
-                excited to discuss new opportunities and interesting projects.
+                {t('contact.info.availableFor')}
               </p>
             </div>
 

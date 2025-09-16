@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { ExternalLink, Github, Filter } from 'lucide-react';
 import { useProjects } from '../../hooks/useProjects';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 
 const ProjectsPage: React.FC = () => {
+  const { t } = useTranslation();
   const { projects, loading } = useProjects();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
@@ -63,11 +65,10 @@ const ProjectsPage: React.FC = () => {
           className="text-center space-y-8 mb-16"
         >
           <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            My Projects
+            {t('projects.title')}
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            A collection of projects showcasing my expertise in modern web development, 
-            from interactive applications to complex systems.
+            {t('projects.subtitle')}
           </p>
         </motion.div>
 
@@ -86,7 +87,7 @@ const ProjectsPage: React.FC = () => {
               className="md:hidden"
             >
               <Filter className="w-4 h-4 mr-2" />
-              Filters
+              {t('common.filter')}
             </Button>
             
             <div className={`flex flex-wrap gap-2 ${showFilters ? 'block' : 'hidden md:flex'}`}>
@@ -98,14 +99,14 @@ const ProjectsPage: React.FC = () => {
                   onClick={() => setSelectedCategory(category)}
                   className="capitalize"
                 >
-                  {category}
+                  {category === 'all' ? t('common.all') : t(`projects.categories.${category}`, category)}
                 </Button>
               ))}
             </div>
           </div>
 
           <p className="text-gray-600 dark:text-gray-400">
-            {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''}
+            {t('projects.projectCount', { count: filteredProjects.length })}
           </p>
         </motion.div>
 
@@ -157,7 +158,7 @@ const ProjectsPage: React.FC = () => {
                         </h3>
                         {project.featured && (
                           <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                            Featured
+                            {t('common.featured')}
                           </span>
                         )}
                       </div>
@@ -190,7 +191,7 @@ const ProjectsPage: React.FC = () => {
                           onClick={() => window.open(project.demo_url, '_blank')}
                         >
                           <ExternalLink className="w-4 h-4 mr-2" />
-                          Demo
+                          {t('common.demo')}
                         </Button>
                       )}
                       {project.github_url && (
@@ -201,7 +202,7 @@ const ProjectsPage: React.FC = () => {
                           onClick={() => window.open(project.github_url, '_blank')}
                         >
                           <Github className="w-4 h-4 mr-2" />
-                          Code
+                          {t('common.code')}
                         </Button>
                       )}
                     </div>
@@ -219,7 +220,7 @@ const ProjectsPage: React.FC = () => {
             className="text-center py-20"
           >
             <p className="text-xl text-gray-600 dark:text-gray-400">
-              No projects found in this category.
+              {t('projects.noProjects')}
             </p>
           </motion.div>
         )}

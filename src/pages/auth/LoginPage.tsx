@@ -128,14 +128,14 @@ const LoginPage: React.FC = () => {
           <Card className="p-6 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
             <div className="text-center space-y-2">
               <h3 className="font-semibold text-blue-900 dark:text-blue-100">
-                Demo Credentials
+                {t('auth.login.demoCredentials')}
               </h3>
               <p className="text-sm text-blue-700 dark:text-blue-300">
                 Email: admin@example.com<br />
                 Password: admin123
               </p>
               <p className="text-xs text-blue-600 dark:text-blue-400">
-                Use these credentials to test the admin panel
+                {t('auth.login.demoNote')}
               </p>
             </div>
           </Card>

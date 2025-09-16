@@ -1,11 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useInView } from 'react-intersection-observer';
 import { Download, Award, Users, Coffee, Code } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
 
 const AboutPage: React.FC = () => {
+  const { t } = useTranslation();
   const [aboutRef, aboutInView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [skillsRef, skillsInView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [statsRef, statsInView] = useInView({ triggerOnce: true, threshold: 0.1 });
@@ -27,17 +29,17 @@ const AboutPage: React.FC = () => {
   };
 
   const skills = [
-    { category: 'Frontend', items: ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Framer Motion'] },
-    { category: 'Backend', items: ['Node.js', 'Python', 'PostgreSQL', 'Supabase', 'GraphQL'] },
-    { category: 'Tools', items: ['Git', 'Docker', 'AWS', 'Figma', 'VS Code'] },
-    { category: 'Soft Skills', items: ['Problem Solving', 'Team Leadership', 'Communication', 'Agile', 'Mentoring'] }
+    { category: t('about.skillCategories.frontend'), items: ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Framer Motion'] },
+    { category: t('about.skillCategories.backend'), items: ['Node.js', 'Python', 'PostgreSQL', 'Supabase', 'GraphQL'] },
+    { category: t('about.skillCategories.tools'), items: ['Git', 'Docker', 'AWS', 'Figma', 'VS Code'] },
+    { category: t('about.skillCategories.softSkills'), items: ['Problem Solving', 'Team Leadership', 'Communication', 'Agile', 'Mentoring'] }
   ];
 
   const stats = [
-    { icon: Code, label: 'Projects Completed', value: '50+' },
-    { icon: Users, label: 'Happy Clients', value: '25+' },
-    { icon: Award, label: 'Years Experience', value: '5+' },
-    { icon: Coffee, label: 'Cups of Coffee', value: '1000+' }
+    { icon: Code, label: t('about.stats.projectsCompleted'), value: '50+' },
+    { icon: Users, label: t('about.stats.happyClients'), value: '25+' },
+    { icon: Award, label: t('about.stats.yearsExperience'), value: '5+' },
+    { icon: Coffee, label: t('about.stats.cupsOfCoffee'), value: '1000+' }
   ];
 
   return (
@@ -51,11 +53,10 @@ const AboutPage: React.FC = () => {
             className="text-center space-y-8 mb-16"
           >
             <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              About Me
+              {t('about.title')}
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Passionate full-stack developer with a love for creating exceptional digital experiences 
-              that make a difference in people's lives.
+              {t('about.subtitle')}
             </p>
           </motion.div>
 
@@ -177,18 +178,14 @@ const AboutPage: React.FC = () => {
           >
             <motion.div variants={fadeInUp} className="text-center space-y-4">
               <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
-                Skills & Expertise
-              </h2>
-              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                A comprehensive toolkit for building modern web applications and solving complex problems.
+                {t('about.skillsTitle')}
+                {t('about.skillsSubtitle')}
               </p>
             </motion.div>
 
             <motion.div
               variants={staggerChildren}
-              className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
-            >
-              {skills.map(({ category, items }) => (
+                {t('about.description2')}
                 <motion.div
                   key={category}
                   variants={fadeInUp}
@@ -211,8 +208,7 @@ const AboutPage: React.FC = () => {
                         </div>
                       ))}
                     </div>
-                  </Card>
-                </motion.div>
+                {t('about.description3')}
               ))}
             </motion.div>
           </motion.div>
@@ -223,3 +219,4 @@ const AboutPage: React.FC = () => {
 };
 
 export default AboutPage;
+                {t('common.downloadResume')}
