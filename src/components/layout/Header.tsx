@@ -3,21 +3,25 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Moon, Sun, Menu, X, User, LogOut } from 'lucide-react';
 import { useTheme } from '../../contexts/theme-utils';
-import { useAuth } from '../../contexts/auth-utils';  
+import { useAuth } from '../../contexts/auth-utils';
+import { useTranslation } from 'react-i18next'; // 👈 Added for translations
 import Button from '../ui/Button';
+import LanguageSwitcher from '../ui/LanguageSwitcher'; // 👈 Import your LanguageSwitcher
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { isDarkMode, toggleTheme } = useTheme();
   const { user, isAdmin, signOut } = useAuth();
+  const { t } = useTranslation(); // 👈 Initialize translation hook
   const location = useLocation();
 
+  // 👇 Translated navigation items
   const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
-    { name: 'Projects', href: '/projects' },
-    { name: 'Contact', href: '/contact' }
+    { name: t('nav.home'), href: '/' },
+    { name: t('nav.about'), href: '/about' },
+    { name: t('nav.projects'), href: '/projects' },
+    { name: t('nav.contact'), href: '/contact' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -78,6 +82,9 @@ const Header: React.FC = () => {
 
           {/* Right side controls */}
           <div className="flex items-center space-x-4">
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+
             {/* Theme toggle */}
             <Button
               variant="ghost"
@@ -100,7 +107,7 @@ const Header: React.FC = () => {
                 >
                   <User className="w-5 h-5" />
                 </Button>
-                
+
                 <AnimatePresence>
                   {isUserMenuOpen && (
                     <motion.div
@@ -123,7 +130,7 @@ const Header: React.FC = () => {
                         className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2"
                       >
                         <LogOut className="w-4 h-4" />
-                        <span>Sign Out</span>
+                        <span>{t('auth.signOut')}</span> {/* 👈 Translated */}
                       </button>
                     </motion.div>
                   )}
@@ -131,7 +138,7 @@ const Header: React.FC = () => {
               </div>
             ) : (
               <Link to="/login">
-                <Button size="sm">Sign In</Button>
+                <Button size="sm">{t('auth.signIn')}</Button> {/* 👈 Translated */}
               </Link>
             )}
 
