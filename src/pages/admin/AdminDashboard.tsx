@@ -10,7 +10,7 @@ import {
   Plus,
 } from 'lucide-react';
 import { useProjects } from '../../hooks/useProjects';
-import { Project } from '../../types';
+import { Project } from '../../types/index';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
 import ProjectForm from '../../components/admin/ProjectForm';

@@ -1,27 +1,43 @@
-import { Globe, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import Button from './Button';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import ReactCountryFlag from 'react-country-flag';
 
 const languages = [
   { code: 'en', name: 'English', country_code: 'US' },
-  { code: 'ar', name: 'العربية', country_code: 'SA' }, // SA = Saudi Arabia, or use EG, PS, etc.
+  { code: 'ar', name: 'العربية', country_code: 'SA' },
 ];
 
 const LanguageSwitcher: React.FC = () => {
-  const { i18n } = useTranslation();
+  const { i18n } = useTranslation(); // ✅ This is good — it subscribes to language changes
   const [isOpen, setIsOpen] = useState(false);
 
-  const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
+  // 👇 This ensures reactivity — useMemo depends on i18n.language
+  const currentLanguage = useMemo(() => {
+    return languages.find(lang => lang.code === i18n.language) || languages[0];
+  }, [i18n.language]);
+
   const isRTL = i18n.language === 'ar';
 
   const handleLanguageChange = (languageCode: string) => {
+    console.log('Changing language to:', languageCode); // 👈 Debug log
     i18n.changeLanguage(languageCode);
     setIsOpen(false);
   };
+  useEffect(() => {
+    const htmlElement = document.documentElement;
 
+    // Set language
+    htmlElement.lang = i18n.language;
+
+    // Set direction (rtl for Arabic, ltr otherwise)
+    htmlElement.dir = i18n.dir(); // i18next provides .dir() helper
+
+    // Optional: Log for debugging
+    console.log(`🌐 HTML lang="${htmlElement.lang}" dir="${htmlElement.dir}"`);
+  }, [i18n.language]); // Re-run when language changes
   return (
     <div className="relative" dir={isRTL ? 'rtl' : 'ltr'}>
       <Button
@@ -31,9 +47,9 @@ const LanguageSwitcher: React.FC = () => {
         className="flex items-center space-x-2 p-2"
         aria-label="Change language"
       >
-        <Globe className="w-4 h-4 ml-2" />
-        {/* 👇 Replace emoji with ReactCountryFlag */}
+        {/* 👇 Add key={i18n.language} to force re-render */}
         <ReactCountryFlag
+          key={i18n.language} // ← This ensures flag updates
           countryCode={currentLanguage.country_code}
           svg
           style={{
@@ -44,10 +60,12 @@ const LanguageSwitcher: React.FC = () => {
           }}
           title={currentLanguage.name}
         />
+        <span className='pr-2'>{currentLanguage.name}</span>
         <ChevronDown
           className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           style={{ transform: isRTL && isOpen ? 'rotate(180deg) scaleX(-1)' : undefined }}
         />
+        
       </Button>
 
       <AnimatePresence>
@@ -83,7 +101,6 @@ const LanguageSwitcher: React.FC = () => {
                   lang={language.code}
                   dir="auto"
                 >
-                  {/* 👇 Flag icon */}
                   <ReactCountryFlag
                     countryCode={language.country_code}
                     svg

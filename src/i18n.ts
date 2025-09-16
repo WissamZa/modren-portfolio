@@ -1,47 +1,46 @@
-
-
+// src/i18n.ts
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+
+// 👇 Import translations statically
+import enTranslation from './locales/en/translation.json';
+import arTranslation from './locales/ar/translation.json';
+
+// 👇 Optional: If you still want to detect user language (e.g., from localStorage)
 import LanguageDetector from 'i18next-browser-languagedetector';
-import HttpApi from 'i18next-http-backend';
-
-// 👇 Import primary language (e.g., English) statically — bundled with JS
-import enTranslation from './lib/locales/en/translation.json';
-
-// 👇 Arabic (or other secondary languages) will be lazy-loaded from public/ via HTTP
 
 i18n
-  .use(HttpApi)                    // ← enables lazy loading
-  .use(LanguageDetector)           // ← auto detect user language
-  .use(initReactI18next)           // ← connects i18n to React
+  // 👇 Remove HttpApi — we don’t need it anymore
+  .use(LanguageDetector) // ← optional, remove if you always want 'en' by default
+  .use(initReactI18next)
   .init({
-    // 👇 Preload English translations (no HTTP request needed for default language)
+    // 👇 Define all bundled resources
     resources: {
       en: { translation: enTranslation },
+      ar: { translation: arTranslation },
     },
 
-    // 👇 Supported languages
+    // 👇 Supported and fallback languages
     supportedLngs: ['en', 'ar'],
-
-    // 👇 Fallback if user’s language not supported
     fallbackLng: 'en',
 
-    // 👇 Auto-detection order
+    // 👇 Language detection (optional)
     detection: {
-      order: ['localStorage', 'cookie', 'navigator'],
-      caches: ['localStorage', 'cookie'],
+      order: ['localStorage', 'navigator'], // try localStorage first, then browser
+      caches: ['localStorage'], // save user’s choice
     },
 
-    // 👇 Where to load other languages from (e.g., Arabic)
-    backend: {
-      loadPath: '/locales/{{lng}}/translation.json', // ← served from public/locales/
+    // 👇 IMPORTANT: Disable suspense since everything is bundled
+    react: {
+      useSuspense: false,
     },
 
-    // 👇 Disable suspense if you don’t want to wrap app in <Suspense>
-    react: { useSuspense: false },
+    interpolation: {
+      escapeValue: false, // React already escapes
+    },
 
-    // 👇 Optional: log missing keys during dev
-    // debug: process.env.NODE_ENV === 'development',
+    debug: true, // set to true for dev if needed
   });
+
 
 export default i18n;
