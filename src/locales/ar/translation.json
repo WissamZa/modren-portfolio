@@ -1,0 +1,31 @@
+{
+  "title": "الملف الشخصي",
+  "header": {
+    "nav": {
+      "home": "الرئيسية",
+      "about": "من نحن",
+      "projects": "المشاريع",
+      "contact": "اتصل بنا"
+    },
+    "auth": {
+      "signIn": "تسجيل الدخول",
+      "signOut": "تسجيل الخروج"
+    }
+  },
+  "footer": {
+    "description": "انشاء تجارب رقمية باستخدام تقنيات حديثة وحلول إبداعية.",
+    "socialLinks": {
+      "github": "GitHub",
+      "linkedin": "LinkedIn",
+      "email": "البريد الإلكتروني"
+    },
+    "quick_links": "روابط سريعة",
+    "Connect": "تواصل",
+    "navigation": {
+      "home": "الرئيسية",
+      "about": "من نحن",
+      "projects": "المشاريع",
+      "contact": "اتصل بنا"
+    }
+  }
+}

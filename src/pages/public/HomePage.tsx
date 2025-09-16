@@ -98,7 +98,7 @@ const HomePage: React.FC = () => {
 
             <motion.div
               variants={fadeInUp}
-              className="flex justify-center space-x-6"
+              className="flex justify-center gap-6"
             >
               {[
                 { icon: Github, href: 'https://github.com', label: 'GitHub' },
