@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { X, ExternalLink, Github, Calendar, Tag, Star } from 'lucide-react';
-import { Project } from '../../types';
+import { Project } from '../../types/index';
 import Button from '../ui/Button';
 import Card from '../ui/Card';
 

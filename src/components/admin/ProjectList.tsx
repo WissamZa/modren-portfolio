@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Edit, Trash2, ExternalLink, Github, Eye, Star } from 'lucide-react';
-import { Project } from '../../types';
+import { Project } from '../../types/index';
 import Button from '../ui/Button';
 import Card from '../ui/Card';
 
