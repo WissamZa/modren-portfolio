@@ -42,7 +42,8 @@ const Footer: React.FC = () => {
                     <a
                       href={`/modren-portfolio/#/${label.toLowerCase()}`}
                       className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
-                    {label}
+                    >
+                      {label}
                     </a>
                   </li>
                 );
