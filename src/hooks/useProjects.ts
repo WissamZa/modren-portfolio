@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { Project } from '../types';
+import { Project } from '../types/index';
 import toast from 'react-hot-toast';
 
 export const useProjects = () => {
