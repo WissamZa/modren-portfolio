@@ -1,23 +1,27 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Menu, X, User, LogOut } from 'lucide-react';
-import { useTheme } from '../../contexts/theme-utils';
-import { useAuth } from '../../contexts/auth-utils';  
-import Button from '../ui/Button';
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Moon, Sun, Menu, X, User, LogOut } from "lucide-react";
+import { useTheme } from "../../contexts/theme-utils";
+import { useAuth } from "../../contexts/auth-utils";
+import { useTranslation } from "react-i18next"; // 👈 Added for translations
+import Button from "../ui/Button";
+import LanguageSwitcher from "../ui/LanguageSwitcher"; // 👈 Import your LanguageSwitcher
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { isDarkMode, toggleTheme } = useTheme();
   const { user, isAdmin, signOut } = useAuth();
+  const { t } = useTranslation(); // 👈 Initialize translation hook
   const location = useLocation();
 
+  // 👇 Translated navigation items
   const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
-    { name: 'Projects', href: '/projects' },
-    { name: 'Contact', href: '/contact' }
+    { name: t("header.nav.home"), href: "/" },
+    { name: t("header.nav.about"), href: "/about" },
+    { name: t("header.nav.projects"), href: "/projects" },
+    { name: t("header.nav.contact"), href: "/contact" },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -27,7 +31,7 @@ const Header: React.FC = () => {
       await signOut();
       setIsUserMenuOpen(false);
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error("Error signing out:", error);
     }
   };
 
@@ -40,7 +44,7 @@ const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center gap-2">
             <motion.div
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.5 }}
@@ -54,15 +58,15 @@ const Header: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:grid md:grid-cols-4 gap-x-8">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className={`relative px-3 py-2 text-sm font-medium transition-colors duration-200 ${
+                className={`relative py-2 text-sm font-medium transition-colors duration-200 text-center ${
                   isActive(item.href)
-                    ? 'text-blue-600 dark:text-blue-400'
-                    : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
+                    ? "text-blue-600 dark:text-blue-400"
+                    : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
                 }`}
               >
                 {item.name}
@@ -75,9 +79,11 @@ const Header: React.FC = () => {
               </Link>
             ))}
           </nav>
-
           {/* Right side controls */}
           <div className="flex items-center space-x-4">
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+
             {/* Theme toggle */}
             <Button
               variant="ghost"
@@ -86,7 +92,11 @@ const Header: React.FC = () => {
               className="p-2"
               aria-label="Toggle theme"
             >
-              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {isDarkMode ? (
+                <Sun className="w-5 h-5" />
+              ) : (
+                <Moon className="w-5 h-5" />
+              )}
             </Button>
 
             {/* User menu */}
@@ -100,7 +110,7 @@ const Header: React.FC = () => {
                 >
                   <User className="w-5 h-5" />
                 </Button>
-                
+
                 <AnimatePresence>
                   {isUserMenuOpen && (
                     <motion.div
@@ -123,7 +133,7 @@ const Header: React.FC = () => {
                         className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2"
                       >
                         <LogOut className="w-4 h-4" />
-                        <span>Sign Out</span>
+                        <span>{t("auth.signOut")}</span> {/* 👈 Translated */}
                       </button>
                     </motion.div>
                   )}
@@ -131,7 +141,8 @@ const Header: React.FC = () => {
               </div>
             ) : (
               <Link to="/login">
-                <Button size="sm">Sign In</Button>
+                <Button size="sm">{t("auth.signIn")}</Button>{" "}
+                {/* 👈 Translated */}
               </Link>
             )}
 
@@ -142,7 +153,11 @@ const Header: React.FC = () => {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden p-2"
             >
-              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
             </Button>
           </div>
         </div>
@@ -152,7 +167,7 @@ const Header: React.FC = () => {
           {isMenuOpen && (
             <motion.nav
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
+              animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               className="md:hidden py-4 border-t border-gray-200 dark:border-gray-700"
             >
@@ -162,8 +177,8 @@ const Header: React.FC = () => {
                   to={item.href}
                   className={`block px-3 py-2 text-base font-medium transition-colors duration-200 ${
                     isActive(item.href)
-                      ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
-                      : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
+                      ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
+                      : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
