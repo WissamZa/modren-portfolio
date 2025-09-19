@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Eye, EyeOff, Mail, Lock, LogIn } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../contexts/AuthContext';
+import { useLanguageNavigation } from '../../hooks/useLanguageNavigation';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
@@ -24,6 +26,8 @@ interface LoginFormData {
 const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { signIn } = useAuth();
+  const { t } = useTranslation();
+  const { getLanguageUrl } = useLanguageNavigation();
   const navigate = useNavigate();
   
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormData>({
@@ -33,8 +37,8 @@ const LoginPage: React.FC = () => {
   const onSubmit = async (data: LoginFormData) => {
     try {
       await signIn(data.email, data.password);
-      toast.success('Welcome back!');
-      navigate('/');
+      toast.success(t('auth.login.welcomeBack'));
+      navigate(getLanguageUrl('/'));
     } catch (error: any) {
       toast.error(error.message || 'Failed to sign in');
     }
@@ -58,10 +62,10 @@ const LoginPage: React.FC = () => {
               <LogIn className="w-8 h-8 text-white" />
             </motion.div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Welcome Back
+              {t('auth.login.title')}
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              Sign in to access your admin panel
+              {t('auth.login.subtitle')}
             </p>
           </div>
 
@@ -69,9 +73,9 @@ const LoginPage: React.FC = () => {
           <Card className="p-8">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <Input
-                label="Email Address"
+                label={t('auth.login.email')}
                 type="email"
-                placeholder="admin@example.com"
+                placeholder={t('auth.login.emailPlaceholder')}
                 leftIcon={<Mail className="w-5 h-5 text-gray-400" />}
                 error={errors.email?.message}
                 {...register('email')}
@@ -79,12 +83,12 @@ const LoginPage: React.FC = () => {
 
               <div className="space-y-1">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Password
+                  {t('auth.login.password')}
                 </label>
                 <div className="relative">
                   <Input
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Enter your password"
+                    placeholder={t('auth.login.passwordPlaceholder')}
                     leftIcon={<Lock className="w-5 h-5 text-gray-400" />}
                     rightIcon={
                       <button
@@ -107,18 +111,18 @@ const LoginPage: React.FC = () => {
                 loading={isSubmitting}
                 className="w-full"
               >
-                Sign In
+                {t('auth.login.signIn')}
               </Button>
             </form>
 
             <div className="mt-6 text-center">
               <p className="text-gray-600 dark:text-gray-400">
-                Don't have an account?{' '}
+                {t('auth.login.noAccount')}{' '}
                 <Link
-                  to="/signup"
+                  to={getLanguageUrl('/signup')}
                   className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
                 >
-                  Sign up
+                  {t('auth.login.signUp')}
                 </Link>
               </p>
             </div>
@@ -128,14 +132,14 @@ const LoginPage: React.FC = () => {
           <Card className="p-6 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
             <div className="text-center space-y-2">
               <h3 className="font-semibold text-blue-900 dark:text-blue-100">
-                {t('auth.login.demoCredentials')}
+                Demo Credentials
               </h3>
               <p className="text-sm text-blue-700 dark:text-blue-300">
                 Email: admin@example.com<br />
                 Password: admin123
               </p>
               <p className="text-xs text-blue-600 dark:text-blue-400">
-                {t('auth.login.demoNote')}
+                Use these credentials to test the admin panel
               </p>
             </div>
           </Card>

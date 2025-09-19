@@ -5,8 +5,10 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Eye, EyeOff, Mail, Lock, User, UserPlus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import { supabase } from '../../lib/supabase';
+import { useLanguageNavigation } from '../../hooks/useLanguageNavigation';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
@@ -28,6 +30,8 @@ interface SignupFormData {
 const SignupPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { t } = useTranslation();
+  const { getLanguageUrl } = useLanguageNavigation();
   const navigate = useNavigate();
   
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<SignupFormData>({
@@ -43,8 +47,8 @@ const SignupPage: React.FC = () => {
 
       if (error) throw error;
 
-      toast.success('Account created successfully! Please check your email to verify your account.');
-      navigate('/login');
+      toast.success(t('auth.signup.success'));
+      navigate(getLanguageUrl('/login'));
     } catch (error: any) {
       toast.error(error.message || 'Failed to create account');
     }
@@ -68,10 +72,10 @@ const SignupPage: React.FC = () => {
               <UserPlus className="w-8 h-8 text-white" />
             </motion.div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Create Account
+              {t('auth.signup.title')}
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              Sign up to get admin access
+              {t('auth.signup.subtitle')}
             </p>
           </div>
 
@@ -79,9 +83,9 @@ const SignupPage: React.FC = () => {
           <Card className="p-8">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <Input
-                label="Email Address"
+                label={t('auth.signup.email')}
                 type="email"
-                placeholder="your@email.com"
+                placeholder={t('auth.signup.emailPlaceholder')}
                 leftIcon={<Mail className="w-5 h-5 text-gray-400" />}
                 error={errors.email?.message}
                 {...register('email')}
@@ -89,12 +93,12 @@ const SignupPage: React.FC = () => {
 
               <div className="space-y-1">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Password
+                  {t('auth.signup.password')}
                 </label>
                 <div className="relative">
                   <Input
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Create a password"
+                    placeholder={t('auth.signup.passwordPlaceholder')}
                     leftIcon={<Lock className="w-5 h-5 text-gray-400" />}
                     rightIcon={
                       <button
@@ -113,12 +117,12 @@ const SignupPage: React.FC = () => {
 
               <div className="space-y-1">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Confirm Password
+                  {t('auth.signup.confirmPassword')}
                 </label>
                 <div className="relative">
                   <Input
                     type={showConfirmPassword ? 'text' : 'password'}
-                    placeholder="Confirm your password"
+                    placeholder={t('auth.signup.confirmPasswordPlaceholder')}
                     leftIcon={<Lock className="w-5 h-5 text-gray-400" />}
                     rightIcon={
                       <button
@@ -141,18 +145,18 @@ const SignupPage: React.FC = () => {
                 loading={isSubmitting}
                 className="w-full"
               >
-                Create Account
+                {t('auth.signup.createAccount')}
               </Button>
             </form>
 
             <div className="mt-6 text-center">
               <p className="text-gray-600 dark:text-gray-400">
-                Already have an account?{' '}
+                {t('auth.signup.hasAccount')}{' '}
                 <Link
-                  to="/login"
+                  to={getLanguageUrl('/login')}
                   className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
                 >
-                  Sign in
+                  {t('auth.signup.signIn')}
                 </Link>
               </p>
             </div>

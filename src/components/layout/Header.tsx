@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Moon, Sun, Menu, X, User, LogOut } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
+import { useLanguageNavigation } from '../../hooks/useLanguageNavigation';
 import Button from '../ui/Button';
 import LanguageSwitcher from '../ui/LanguageSwitcher';
 
@@ -14,16 +15,25 @@ const Header: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const { user, isAdmin, signOut } = useAuth();
   const { t } = useTranslation();
+  const { lang } = useParams<{ lang: string }>();
+  const { getLanguageUrl } = useLanguageNavigation();
   const location = useLocation();
 
+  const currentLang = lang || 'en';
+
   const navigation = [
-    { name: t('nav.home'), href: '/' },
-    { name: t('nav.about'), href: '/about' },
-    { name: t('nav.projects'), href: '/projects' },
-    { name: t('nav.contact'), href: '/contact' }
+    { name: t('nav.home'), href: getLanguageUrl('/') },
+    { name: t('nav.about'), href: getLanguageUrl('/about') },
+    { name: t('nav.projects'), href: getLanguageUrl('/projects') },
+    { name: t('nav.contact'), href: getLanguageUrl('/contact') }
   ];
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    const currentPath = location.pathname;
+    const pathWithoutLang = currentPath.replace(`/${currentLang}`, '') || '/';
+    const targetPath = path.replace(`/${currentLang}`, '') || '/';
+    return pathWithoutLang === targetPath;
+  };
 
   const handleSignOut = async () => {
     try {
@@ -43,7 +53,7 @@ const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to={getLanguageUrl('/')} className="flex items-center space-x-2">
             <motion.div
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.5 }}
@@ -117,7 +127,7 @@ const Header: React.FC = () => {
                     >
                       {isAdmin && (
                         <Link
-                          to="/admin"
+                          to={getLanguageUrl('/admin')}
                           className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
@@ -136,7 +146,7 @@ const Header: React.FC = () => {
                 </AnimatePresence>
               </div>
             ) : (
-              <Link to="/login">
+              <Link to={getLanguageUrl('/login')}>
                 <Button size="sm">{t('nav.signIn')}</Button>
               </Link>
             )}

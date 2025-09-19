@@ -1,14 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, Download, Github, Linkedin } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
+import { useLanguageNavigation } from '../../hooks/useLanguageNavigation';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
 
 const HomePage: React.FC = () => {
   const { t } = useTranslation();
+  const { getLanguageUrl } = useLanguageNavigation();
   const [heroRef, heroInView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [featuresRef, featuresInView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
@@ -86,7 +88,7 @@ const HomePage: React.FC = () => {
               variants={fadeInUp}
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
-              <Link to="/projects">
+              <Link to={getLanguageUrl('/projects')}>
                 <Button size="lg" className="group">
                   {t('home.viewMyWork')}
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />

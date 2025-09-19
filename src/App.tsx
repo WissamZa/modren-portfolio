@@ -1,9 +1,9 @@
 import React from 'react';
-import AppRouter from './components/router/HashRouter';
+import LanguageRouter from './components/router/LanguageRouter';
 
 function App() {
   return (
-    <AppRouter />
+    <LanguageRouter />
   );
 }
 

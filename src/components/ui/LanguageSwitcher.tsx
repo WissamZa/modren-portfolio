@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useLanguageNavigation } from '../../hooks/useLanguageNavigation';
 import { Globe, ChevronDown } from 'lucide-react';
 import Button from './Button';
 
@@ -12,12 +13,14 @@ const languages = [
 
 const LanguageSwitcher: React.FC = () => {
   const { i18n } = useTranslation();
+  const { changeLanguage, getCurrentLanguage } = useLanguageNavigation();
   const [isOpen, setIsOpen] = useState(false);
 
-  const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
+  const currentLangCode = getCurrentLanguage();
+  const currentLanguage = languages.find(lang => lang.code === currentLangCode) || languages[0];
 
   const handleLanguageChange = (languageCode: string) => {
-    i18n.changeLanguage(languageCode);
+    changeLanguage(languageCode);
     setIsOpen(false);
   };
 
@@ -58,7 +61,7 @@ const LanguageSwitcher: React.FC = () => {
                   className={`
                     w-full text-left px-4 py-2 text-sm transition-colors duration-200
                     flex items-center space-x-3
-                    ${i18n.language === language.code
+                    ${currentLangCode === language.code
                       ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                     }
@@ -66,7 +69,7 @@ const LanguageSwitcher: React.FC = () => {
                 >
                   <span className="text-lg">{language.flag}</span>
                   <span>{language.name}</span>
-                  {i18n.language === language.code && (
+                  {currentLangCode === language.code && (
                     <div className="ml-auto w-2 h-2 bg-blue-600 rounded-full" />
                   )}
                 </button>

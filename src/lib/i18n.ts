@@ -821,13 +821,14 @@ i18n
     fallbackLng: 'en',
     debug: false,
     
+    // Don't use language detection from URL since we handle it manually
+    detection: {
+      order: ['localStorage'],
+      caches: ['localStorage'],
+    },
+    
     interpolation: {
       escapeValue: false,
-    },
-
-    detection: {
-      order: ['localStorage', 'navigator', 'htmlTag'],
-      caches: ['localStorage'],
     },
   });
 
