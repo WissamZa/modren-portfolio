@@ -1,12 +1,13 @@
-// LanguageSwitcher.tsx — SIMPLIFIED
+// LanguageSwitcher.tsx — FIXED
 import { ChevronDown } from 'lucide-react';
 import Button from './Button';
 import { useTranslation } from 'react-i18next';
 import { useState, useMemo, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import ReactCountryFlag from 'react-country-flag';
-import { supabase } from '../../lib/supabase'; // 👈 Adjust path
-import { useAuth } from '../../contexts/auth-utils'; // 👈 To get user
+import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../contexts/auth-utils';
+import { useNavigate, useLocation } from 'react-router-dom'; // 👈 ADD THIS
 
 const languages = [
   { code: 'en', name: 'English', country_code: 'US' },
@@ -15,7 +16,9 @@ const languages = [
 
 const LanguageSwitcher: React.FC = () => {
   const { i18n } = useTranslation();
-  const { user } = useAuth(); // 👈 Get user to save preference
+  const { user } = useAuth();
+  const navigate = useNavigate(); // 👈 ADD THIS
+  const location = useLocation(); // 👈 ADD THIS
   const [isOpen, setIsOpen] = useState(false);
 
   const currentLanguage = useMemo(() => {
@@ -24,41 +27,44 @@ const LanguageSwitcher: React.FC = () => {
 
   const isRTL = i18n.language === 'ar';
 
-  // 👇 SIMPLIFIED: Only change i18n, not URL
+  // 👇 FIXED: Change i18n AND update URL
   const handleLanguageChange = async (languageCode: string) => {
-    console.log('Changing language to:', languageCode);
+    // console.log('Changing language to:', languageCode);
 
-    // Change i18n language
-    await i18n.changeLanguage(languageCode);
-
-    // Save to localStorage (for anonymous users)
+    // Save preference
     localStorage.setItem('i18nextLng', languageCode);
-
-    // Save to Supabase if user is logged in
     if (user) {
       try {
         const { error } = await supabase
           .from('profiles')
           .update({ locale: languageCode })
           .eq('id', user.id);
-
         if (error) throw error;
-        console.log('✅ Language saved to Supabase profile');
+        // console.log('✅ Language saved to Supabase profile');
       } catch (err) {
         console.error('Failed to save language preference:', err);
       }
     }
 
+    // 👉 STEP 1: Change i18n language
+    await i18n.changeLanguage(languageCode);
+
+    // 👉 STEP 2: Update URL — preserve current path, change lang prefix
+    const currentPath = location.pathname.replace(/^\/[a-z]{2}/, ''); // Remove /en or /ar
+    const newPath = `/${languageCode}${currentPath ? `/${currentPath}` : ''}`;
+
+    // 👉 STEP 3: Navigate to new path — this triggers React Router to re-render
+    navigate(newPath + location.search + location.hash);
+
     setIsOpen(false);
   };
 
-  // 👇 Keep your HTML dir/lang sync (you already do this well)
+  // Sync HTML attributes
   useEffect(() => {
     const updateHtmlAttributes = () => {
       const htmlElement = document.documentElement;
       htmlElement.lang = i18n.language;
       htmlElement.dir = i18n.dir();
-      console.log(`🌐 HTML lang="${htmlElement.lang}" dir="${htmlElement.dir}"`);
     };
 
     updateHtmlAttributes();

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, redirect, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Moon, Sun, Menu, X, User, LogOut } from "lucide-react";
 import { useTheme } from "../../contexts/theme-utils";
@@ -30,6 +30,7 @@ const Header: React.FC = () => {
     try {
       await signOut();
       setIsUserMenuOpen(false);
+      redirect("/");
     } catch (error) {
       console.error("Error signing out:", error);
     }
@@ -141,7 +142,7 @@ const Header: React.FC = () => {
               </div>
             ) : (
               <Link to="/login">
-                <Button size="sm">{t("auth.signIn")}</Button>{" "}
+                <Button size="sm">{t("header.auth.signIn")}</Button>{" "}
                 {/* 👈 Translated */}
               </Link>
             )}

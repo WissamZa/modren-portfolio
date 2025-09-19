@@ -56,7 +56,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Apply language if different
       if (i18n.language !== detectedLang) {
         await i18n.changeLanguage(detectedLang);
-        console.log(`🌐 Initialized language: ${detectedLang}`);
+        // console.log(`🌐 Initialized language: ${detectedLang}`);
       }
     } catch (err) {
       console.error('Failed to initialize language:', err);
