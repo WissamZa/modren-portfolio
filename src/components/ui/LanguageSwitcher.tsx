@@ -1,9 +1,12 @@
+// LanguageSwitcher.tsx — SIMPLIFIED
 import { ChevronDown } from 'lucide-react';
 import Button from './Button';
 import { useTranslation } from 'react-i18next';
 import { useState, useMemo, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import ReactCountryFlag from 'react-country-flag';
+import { supabase } from '../../lib/supabase'; // 👈 Adjust path
+import { useAuth } from '../../contexts/auth-utils'; // 👈 To get user
 
 const languages = [
   { code: 'en', name: 'English', country_code: 'US' },
@@ -12,6 +15,7 @@ const languages = [
 
 const LanguageSwitcher: React.FC = () => {
   const { i18n } = useTranslation();
+  const { user } = useAuth(); // 👈 Get user to save preference
   const [isOpen, setIsOpen] = useState(false);
 
   const currentLanguage = useMemo(() => {
@@ -20,13 +24,35 @@ const LanguageSwitcher: React.FC = () => {
 
   const isRTL = i18n.language === 'ar';
 
-  const handleLanguageChange = (languageCode: string) => {
+  // 👇 SIMPLIFIED: Only change i18n, not URL
+  const handleLanguageChange = async (languageCode: string) => {
     console.log('Changing language to:', languageCode);
-    i18n.changeLanguage(languageCode);
+
+    // Change i18n language
+    await i18n.changeLanguage(languageCode);
+
+    // Save to localStorage (for anonymous users)
+    localStorage.setItem('i18nextLng', languageCode);
+
+    // Save to Supabase if user is logged in
+    if (user) {
+      try {
+        const { error } = await supabase
+          .from('profiles')
+          .update({ locale: languageCode })
+          .eq('id', user.id);
+
+        if (error) throw error;
+        console.log('✅ Language saved to Supabase profile');
+      } catch (err) {
+        console.error('Failed to save language preference:', err);
+      }
+    }
+
     setIsOpen(false);
   };
 
-  // 👇 BEST PRACTICE: Use i18next event listener
+  // 👇 Keep your HTML dir/lang sync (you already do this well)
   useEffect(() => {
     const updateHtmlAttributes = () => {
       const htmlElement = document.documentElement;
@@ -35,17 +61,13 @@ const LanguageSwitcher: React.FC = () => {
       console.log(`🌐 HTML lang="${htmlElement.lang}" dir="${htmlElement.dir}"`);
     };
 
-    // Set initial values
     updateHtmlAttributes();
-
-    // Listen for language changes
     i18n.on('languageChanged', updateHtmlAttributes);
 
-    // Cleanup
     return () => {
       i18n.off('languageChanged', updateHtmlAttributes);
     };
-  }, [i18n]); // ✅ Safe — i18n is stable
+  }, [i18n]);
 
   return (
     <div className="relative" dir={isRTL ? 'rtl' : 'ltr'}>

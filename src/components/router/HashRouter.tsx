@@ -1,5 +1,11 @@
+// AppRouter.tsx — SIMPLIFIED
 import React from 'react';
-import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import {
+  HashRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from '../../contexts/ThemeContext';
 import { AuthProvider } from '../../contexts/AuthContext';
@@ -13,7 +19,7 @@ import ContactPage from '../../pages/public/ContactPage';
 import LoginPage from '../../pages/auth/LoginPage';
 import AdminDashboard from '../../pages/admin/AdminDashboard';
 
-// Layout component
+// Layout component (unchanged)
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
     <Header />
@@ -24,7 +30,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   </div>
 );
 
-// Protected route component
+// ProtectedRoute (unchanged)
 const ProtectedRoute: React.FC<{ children: React.ReactNode; adminOnly?: boolean }> = ({ 
   children, 
   adminOnly = false 
@@ -50,6 +56,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; adminOnly?: boolean 
   return <>{children}</>;
 };
 
+// 👇 MAIN CHANGE: No :lang routes. URLs stay clean.
 function AppRouter() {
   return (
     <ThemeProvider>
@@ -63,7 +70,6 @@ function AppRouter() {
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/login" element={<LoginPage />} />
               
-              {/* Protected Admin Routes */}
               <Route 
                 path="/admin" 
                 element={
@@ -73,10 +79,10 @@ function AppRouter() {
                 } 
               />
               
-              {/* Fallback route */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Layout>
+
           <Toaster
             position="bottom-right"
             toastOptions={{
