@@ -13,14 +13,15 @@ import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from '../../contexts/ThemeContext';
 import { AuthProvider } from '../../contexts/AuthContext';
 import { useAuth } from '../../contexts/auth-utils';
-import Layout from '../../components/layout/Layout'; // 👈 Import default export
+import Layout from '../../components/layout/Layout'; 
 import HomePage from '../../pages/public/HomePage';
 import AboutPage from '../../pages/public/AboutPage';
 import ProjectsPage from '../../pages/public/ProjectsPage';
 import ContactPage from '../../pages/public/ContactPage';
 import LoginPage from '../../pages/auth/LoginPage';
+import NotFoundPage from '../../pages/public/NotFoundPage';
 import AdminDashboard from '../../pages/admin/AdminDashboard';
-import RedirectToLocale from './RedirectToLocale'; // 👈 Import redirect component
+import RedirectToLocale from './RedirectToLocale'; // 
 
 // ProtectedRoute — preserve lang in redirects
 const ProtectedRoute: React.FC<{ children: React.ReactNode; adminOnly?: boolean }> = ({ 
@@ -64,6 +65,7 @@ function AppRouter() {
               <Route path="projects" element={<ProjectsPage />} />
               <Route path="contact" element={<ContactPage />} />
               <Route path="login" element={<LoginPage />} />
+              <Route path="*" element={<NotFoundPage />} />
               
               <Route 
                 path="admin" 
