@@ -1,4 +1,3 @@
-import React from "react";
 import { motion, Variants } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, Download, Github, Linkedin } from "lucide-react";
@@ -7,6 +6,7 @@ import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
 import Hero from "../../components/layout/Hero";
 import HeroLayout from "../../components/layout/HeroLayout";
+import { useCurrentLanguage } from "../../hooks/useCurrentLanguage";
 const HomePage: React.FC = () => {
   const [featuresRef, featuresInView] = useInView({
     triggerOnce: true,
@@ -34,6 +34,7 @@ const HomePage: React.FC = () => {
   };
 
   const skills = ["React", "TypeScript", "Node.js", "Python", "AWS", "GraphQL"];
+  const currentLang = useCurrentLanguage();
 
   return (
     <div className="min-h-screen">
@@ -71,14 +72,24 @@ const HomePage: React.FC = () => {
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
             <Link to="/projects">
-              <Button size="lg" className="group">
+              <Button
+                id="workButton"
+                size="lg"
+                className={`group flex ${
+                  currentLang === "ar" ? "flex-row-reverse" : ""
+                }`}
+              >
                 View My Work
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-5 h-5 mx-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <a href="/media/WissamZaidi-Rusame.pdf" target="_self" rel="noopener noreferrer">
+            <a
+              href="/media/WissamZaidi-Rusame.pdf"
+              target="_self"
+              rel="noopener noreferrer"
+            >
               <Button variant="secondary" size="lg" className="group">
-                <Download className="w-5 h-5 mr-2" />
+                <Download className="w-5 h-5 mx-2" />
                 Download Resume
               </Button>
             </a>
@@ -86,7 +97,11 @@ const HomePage: React.FC = () => {
 
           <motion.div variants={fadeInUp} className="flex justify-center gap-6">
             {[
-              { icon: Github, href: "https://github.com/wissamza", label: "GitHub" },
+              {
+                icon: Github,
+                href: "https://github.com/wissamza",
+                label: "GitHub",
+              },
               {
                 icon: Linkedin,
                 href: "https://linkedin.com/in/wissam-zaidi",
