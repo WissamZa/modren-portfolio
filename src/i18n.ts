@@ -8,11 +8,7 @@ import arTranslation from "./locales/ar/translation.json";
 
 // 👇 Optional: If you still want to detect user language (e.g., from localStorage)
 import LanguageDetector from "i18next-browser-languagedetector";
-declare const process: {
-  env: {
-    NODE_ENV: 'development' | 'production' | 'test';
-  };
-};
+
 i18n
   // 👇 Remove HttpApi — we don’t need it anymore
   .use(LanguageDetector) // ← optional, remove if you always want 'en' by default
