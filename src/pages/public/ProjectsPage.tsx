@@ -1,29 +1,33 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Github, Filter } from 'lucide-react';
-import { useProjects } from '../../hooks/useProjects';
-import Card from '../../components/ui/Card';
-import Button from '../../components/ui/Button';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ExternalLink, Github, Filter } from "lucide-react";
+import { useProjects } from "../../hooks/useProjects";
+import Card from "../../components/ui/Card";
+import Button from "../../components/ui/Button";
 
 const ProjectsPage: React.FC = () => {
   const { projects, loading } = useProjects();
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
 
-  const categories = ['all', ...Array.from(new Set(projects.map(p => p.category)))];
-  
-  const filteredProjects = selectedCategory === 'all' 
-    ? projects 
-    : projects.filter(p => p.category === selectedCategory);
+  const categories = [
+    "all",
+    ...Array.from(new Set(projects.map((p) => p.category))),
+  ];
+
+  const filteredProjects =
+    selectedCategory === "all"
+      ? projects
+      : projects.filter((p) => p.category === selectedCategory);
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const itemVariants = {
@@ -32,15 +36,15 @@ const ProjectsPage: React.FC = () => {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.5
-      }
-    }
+        duration: 0.5,
+      },
+    },
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="min-h-screen ">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(6)].map((_, i) => (
               <div key={i} className="animate-pulse">
@@ -54,8 +58,8 @@ const ProjectsPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen pt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div className="min-h-screen pt-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -66,8 +70,8 @@ const ProjectsPage: React.FC = () => {
             My Projects
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            A collection of projects showcasing my expertise in modern web development, 
-            from interactive applications to complex systems.
+            A collection of projects showcasing my expertise in modern web
+            development, from interactive applications to complex systems.
           </p>
         </motion.div>
 
@@ -88,12 +92,16 @@ const ProjectsPage: React.FC = () => {
               <Filter className="w-4 h-4 mr-2" />
               Filters
             </Button>
-            
-            <div className={`flex flex-wrap gap-2 ${showFilters ? 'block' : 'hidden md:flex'}`}>
+
+            <div
+              className={`flex flex-wrap gap-2 ${
+                showFilters ? "block" : "hidden md:flex"
+              }`}
+            >
               {categories.map((category) => (
                 <Button
                   key={category}
-                  variant={selectedCategory === category ? 'primary' : 'ghost'}
+                  variant={selectedCategory === category ? "primary" : "ghost"}
                   size="sm"
                   onClick={() => setSelectedCategory(category)}
                   className="capitalize"
@@ -105,7 +113,8 @@ const ProjectsPage: React.FC = () => {
           </div>
 
           <p className="text-gray-600 dark:text-gray-400">
-            {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''}
+            {filteredProjects.length} project
+            {filteredProjects.length !== 1 ? "s" : ""}
           </p>
         </motion.div>
 
@@ -135,12 +144,20 @@ const ProjectsPage: React.FC = () => {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                         <div className="flex space-x-2">
                           {project.demo_url && (
-                            <Button size="sm" variant="ghost" className="text-white hover:text-blue-400">
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="text-white hover:text-blue-400"
+                            >
                               <ExternalLink className="w-4 h-4" />
                             </Button>
                           )}
                           {project.github_url && (
-                            <Button size="sm" variant="ghost" className="text-white hover:text-blue-400">
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="text-white hover:text-blue-400"
+                            >
                               <Github className="w-4 h-4" />
                             </Button>
                           )}
@@ -148,7 +165,7 @@ const ProjectsPage: React.FC = () => {
                       </div>
                     </div>
                   )}
-                  
+
                   <div className="p-6 space-y-4">
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
@@ -187,7 +204,9 @@ const ProjectsPage: React.FC = () => {
                         <Button
                           size="sm"
                           className="flex-1"
-                          onClick={() => window.open(project.demo_url, '_blank')}
+                          onClick={() =>
+                            window.open(project.demo_url, "_blank")
+                          }
                         >
                           <ExternalLink className="w-4 h-4 mr-2" />
                           Demo
@@ -198,7 +217,9 @@ const ProjectsPage: React.FC = () => {
                           size="sm"
                           variant="secondary"
                           className="flex-1"
-                          onClick={() => window.open(project.github_url, '_blank')}
+                          onClick={() =>
+                            window.open(project.github_url, "_blank")
+                          }
                         >
                           <Github className="w-4 h-4 mr-2" />
                           Code

@@ -18,10 +18,10 @@ const Header: React.FC = () => {
 
   // 👇 Translated navigation items
   const navigation = [
-    { name: t("header.nav.home"), href: "/" },
-    { name: t("header.nav.about"), href: "/about" },
-    { name: t("header.nav.projects"), href: "/projects" },
-    { name: t("header.nav.contact"), href: "/contact" },
+    { name: t("header.nav.home"), href: "" },
+    { name: t("header.nav.about"), href: "about" },
+    { name: t("header.nav.projects"), href: "projects" },
+    { name: t("header.nav.contact"), href: "contact" },
   ];
 
   const isActive = (path: string) => location.pathname === path;
