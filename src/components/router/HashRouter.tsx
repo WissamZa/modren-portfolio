@@ -1,35 +1,35 @@
+// AppRouter.tsx — FIXED
 import React from 'react';
-import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import {
+  HashRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useParams,
+
+} from 'react-router-dom';
+
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from '../../contexts/ThemeContext';
 import { AuthProvider } from '../../contexts/AuthContext';
 import { useAuth } from '../../contexts/auth-utils';
-import Header from '../layout/Header';
-import Footer from '../layout/Footer';
+import Layout from '../../components/layout/Layout'; 
 import HomePage from '../../pages/public/HomePage';
 import AboutPage from '../../pages/public/AboutPage';
 import ProjectsPage from '../../pages/public/ProjectsPage';
 import ContactPage from '../../pages/public/ContactPage';
 import LoginPage from '../../pages/auth/LoginPage';
+import NotFoundPage from '../../pages/public/NotFoundPage';
 import AdminDashboard from '../../pages/admin/AdminDashboard';
+import RedirectToLocale from './RedirectToLocale'; // 
 
-// Layout component
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
-    <Header />
-    <main className="pt-16">
-      {children}
-    </main>
-    <Footer />
-  </div>
-);
-
-// Protected route component
+// ProtectedRoute — preserve lang in redirects
 const ProtectedRoute: React.FC<{ children: React.ReactNode; adminOnly?: boolean }> = ({ 
   children, 
   adminOnly = false 
 }) => {
   const { user, isAdmin, loading } = useAuth();
+  const { lang } = useParams<{ lang: string }>();
 
   if (loading) {
     return (
@@ -40,11 +40,11 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; adminOnly?: boolean 
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to={`/${lang || 'en'}/login`} replace />;
   }
 
   if (adminOnly && !isAdmin) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={`/${lang || 'en'}`} replace />;
   }
 
   return <>{children}</>;
@@ -55,17 +55,20 @@ function AppRouter() {
     <ThemeProvider>
       <AuthProvider>
         <Router>
-          <Layout>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/projects" element={<ProjectsPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/login" element={<LoginPage />} />
+          <Routes>
+            {/* Redirect / → /en or /ar */}
+            <Route path="/" element={<RedirectToLocale />} />
+            {/* 👇 All routes under /:lang — wrap with Layout */}
+            <Route path="/:lang" element={<Layout />}>
+              <Route index element={<HomePage />} />
+              <Route path="about" element={<AboutPage />} />
+              <Route path="projects" element={<ProjectsPage />} />
+              <Route path="contact" element={<ContactPage />} />
+              <Route path="login" element={<LoginPage />} />
+              <Route path="*" element={<NotFoundPage />} />
               
-              {/* Protected Admin Routes */}
               <Route 
-                path="/admin" 
+                path="admin" 
                 element={
                   <ProtectedRoute adminOnly>
                     <AdminDashboard />
@@ -73,21 +76,12 @@ function AppRouter() {
                 } 
               />
               
-              {/* Fallback route */}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </Layout>
-          <Toaster
-            position="bottom-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: 'var(--toast-bg)',
-                color: 'var(--toast-color)',
-                border: '1px solid var(--toast-border)',
-              },
-            }}
-          />
+              {/* Fallback */}
+              <Route path="*" element={<Navigate to="" replace />} />
+            </Route>
+          </Routes>
+
+          <Toaster position="bottom-right" />
         </Router>
       </AuthProvider>
     </ThemeProvider>

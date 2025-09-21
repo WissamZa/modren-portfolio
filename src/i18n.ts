@@ -1,13 +1,13 @@
 // src/i18n.ts
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 
 // 👇 Import translations statically
-import enTranslation from './locales/en/translation.json';
-import arTranslation from './locales/ar/translation.json';
+import enTranslation from "./locales/en/translation.json";
+import arTranslation from "./locales/ar/translation.json";
 
 // 👇 Optional: If you still want to detect user language (e.g., from localStorage)
-import LanguageDetector from 'i18next-browser-languagedetector';
+import LanguageDetector from "i18next-browser-languagedetector";
 
 i18n
   // 👇 Remove HttpApi — we don’t need it anymore
@@ -21,13 +21,13 @@ i18n
     },
 
     // 👇 Supported and fallback languages
-    supportedLngs: ['en', 'ar'],
-    fallbackLng: 'en',
+    supportedLngs: ["en", "ar"],
+    fallbackLng: "en",
 
     // 👇 Language detection (optional)
     detection: {
-      order: ['localStorage', 'navigator'], // try localStorage first, then browser
-      caches: ['localStorage'], // save user’s choice
+      order: ["localStorage", "navigator"], // try localStorage first, then browser
+      caches: ["localStorage"], // save user’s choice
     },
 
     // 👇 IMPORTANT: Disable suspense since everything is bundled
@@ -39,8 +39,7 @@ i18n
       escapeValue: false, // React already escapes
     },
 
-    debug: true, // set to true for dev if needed
+    debug: import.meta.env.MODE === 'development',
   });
-
 
 export default i18n;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, redirect, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Moon, Sun, Menu, X, User, LogOut } from "lucide-react";
 import { useTheme } from "../../contexts/theme-utils";
@@ -18,10 +18,10 @@ const Header: React.FC = () => {
 
   // 👇 Translated navigation items
   const navigation = [
-    { name: t("header.nav.home"), href: "/" },
-    { name: t("header.nav.about"), href: "/about" },
-    { name: t("header.nav.projects"), href: "/projects" },
-    { name: t("header.nav.contact"), href: "/contact" },
+    { name: t("header.nav.home"), href: "" },
+    { name: t("header.nav.about"), href: "about" },
+    { name: t("header.nav.projects"), href: "projects" },
+    { name: t("header.nav.contact"), href: "contact" },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -30,6 +30,7 @@ const Header: React.FC = () => {
     try {
       await signOut();
       setIsUserMenuOpen(false);
+      redirect("/");
     } catch (error) {
       console.error("Error signing out:", error);
     }
@@ -133,7 +134,7 @@ const Header: React.FC = () => {
                         className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2"
                       >
                         <LogOut className="w-4 h-4" />
-                        <span>{t("auth.signOut")}</span> {/* 👈 Translated */}
+                        <span>{t("header.auth.signOut")}</span> {/* 👈 Translated */}
                       </button>
                     </motion.div>
                   )}
@@ -141,7 +142,7 @@ const Header: React.FC = () => {
               </div>
             ) : (
               <Link to="/login">
-                <Button size="sm">{t("auth.signIn")}</Button>{" "}
+                <Button size="sm">{t("header.auth.signIn")}</Button>{" "}
                 {/* 👈 Translated */}
               </Link>
             )}
