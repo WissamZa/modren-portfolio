@@ -1,6 +1,9 @@
 {
   "title": "Portfolio",
   "header": {
+    "language": {
+      "title": "Language"
+    },
     "nav": {
       "home": "Home",
       "about": "About",

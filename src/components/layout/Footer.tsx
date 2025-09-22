@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, Heart } from 'lucide-react';
 import { useTranslation } from "react-i18next";
-import i18n from '../../i18n';
+import { Link } from "react-router-dom";
+
 const Footer: React.FC = () => {
   const socialLinks = [
     { icon: Github, href: 'https://github.com/WissamZa', label: 'GitHub' },
@@ -40,12 +41,10 @@ const Footer: React.FC = () => {
                 const [key, label] = item;
                 return (
                   <li key={key}>
-                    <a
-                      href={`/modren-portfolio/${i18n.language}/${label.toLowerCase()}`}
-                      className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
-                    >
+                    <Link to={key} className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+
                       {label}
-                    </a>
+                    </Link>
                   </li>
                 );
               })}

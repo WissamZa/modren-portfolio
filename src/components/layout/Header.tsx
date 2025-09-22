@@ -1,22 +1,22 @@
+// src/components/Header.tsx
 import React, { useState } from "react";
 import { Link, redirect, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Moon, Sun, Menu, X, User, LogOut } from "lucide-react";
 import { useTheme } from "../../contexts/theme-utils";
 import { useAuth } from "../../contexts/auth-utils";
-import { useTranslation } from "react-i18next"; // 👈 Added for translations
+import { useTranslation } from "react-i18next";
 import Button from "../ui/Button";
-import LanguageSwitcher from "../ui/LanguageSwitcher"; // 👈 Import your LanguageSwitcher
+import LanguageSwitcher from "../ui/LanguageSwitcher";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { isDarkMode, toggleTheme } = useTheme();
   const { user, isAdmin, signOut } = useAuth();
-  const { t } = useTranslation(); // 👈 Initialize translation hook
+  const { t } = useTranslation();
   const location = useLocation();
 
-  // 👇 Translated navigation items
   const navigation = [
     { name: t("header.nav.home"), href: "" },
     { name: t("header.nav.about"), href: "about" },
@@ -24,7 +24,7 @@ const Header: React.FC = () => {
     { name: t("header.nav.contact"), href: "contact" },
   ];
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => location.pathname === `/${path}` || (path === "" && location.pathname === "/");
 
   const handleSignOut = async () => {
     try {
@@ -80,10 +80,13 @@ const Header: React.FC = () => {
               </Link>
             ))}
           </nav>
-          {/* Right side controls */}
+
+          {/* Right side controls — DESKTOP ONLY */}
           <div className="flex items-center space-x-4">
-            {/* Language Switcher */}
-            <LanguageSwitcher />
+            {/* 👇 Language Switcher — DESKTOP ONLY */}
+            <div className="hidden md:block">
+              <LanguageSwitcher />
+            </div>
 
             {/* Theme toggle */}
             <Button
@@ -134,16 +137,21 @@ const Header: React.FC = () => {
                         className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2"
                       >
                         <LogOut className="w-4 h-4" />
-                        <span>{t("header.auth.signOut")}</span> {/* 👈 Translated */}
+
+                        <span>{t("header.auth.signOut")}</span>
+
                       </button>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
             ) : (
-              <Link to="/login">
-                <Button size="sm">{t("header.auth.signIn")}</Button>{" "}
-                {/* 👈 Translated */}
+
+              <Link to="login">
+                <Button size="sm" className="text-base md:text-sm">
+                  {t("header.auth.signIn")}
+                </Button>
+
               </Link>
             )}
 
@@ -186,6 +194,14 @@ const Header: React.FC = () => {
                   {item.name}
                 </Link>
               ))}
+
+              {/* 👇 Language Switcher — MOBILE ONLY */}
+              <div className="border-t border-gray-200 dark:border-gray-700 mt-4 pt-4 px-3">
+                <div className="text-xs text-gray-500 uppercase tracking-wider mb-2">
+                  {t("header.language.title")}
+                </div>
+                <LanguageSwitcher />
+              </div>
             </motion.nav>
           )}
         </AnimatePresence>

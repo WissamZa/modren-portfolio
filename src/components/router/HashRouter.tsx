@@ -21,7 +21,9 @@ import ContactPage from '../../pages/public/ContactPage';
 import LoginPage from '../../pages/auth/LoginPage';
 import NotFoundPage from '../../pages/public/NotFoundPage';
 import AdminDashboard from '../../pages/admin/AdminDashboard';
-import RedirectToLocale from './RedirectToLocale'; // 
+import RedirectToLocale from './RedirectToLocale'; 
+import ScrollToTop from '../util/ScrollToTop'; 
+
 
 // ProtectedRoute — preserve lang in redirects
 const ProtectedRoute: React.FC<{ children: React.ReactNode; adminOnly?: boolean }> = ({ 
@@ -55,12 +57,14 @@ function AppRouter() {
     <ThemeProvider>
       <AuthProvider>
         <Router>
+                <ScrollToTop /> 
           <Routes>
             {/* Redirect / → /en or /ar */}
             <Route path="/" element={<RedirectToLocale />} />
             {/* 👇 All routes under /:lang — wrap with Layout */}
             <Route path="/:lang" element={<Layout />}>
               <Route index element={<HomePage />} />
+              <Route path="home" element={<Navigate to='/' replace />} />
               <Route path="about" element={<AboutPage />} />
               <Route path="projects" element={<ProjectsPage />} />
               <Route path="contact" element={<ContactPage />} />

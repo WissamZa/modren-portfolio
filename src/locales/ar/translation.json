@@ -1,6 +1,9 @@
 {
   "title": "الملف الشخصي",
   "header": {
+    "language": {
+      "title": "اللغة"
+    },
     "nav": {
       "home": "الرئيسية",
       "about": "من نحن",
