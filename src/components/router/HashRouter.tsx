@@ -24,6 +24,7 @@ import AdminDashboard from '../../pages/admin/AdminDashboard';
 import RedirectToLocale from './RedirectToLocale'; 
 import ScrollToTop from '../util/ScrollToTop'; 
 
+
 // ProtectedRoute — preserve lang in redirects
 const ProtectedRoute: React.FC<{ children: React.ReactNode; adminOnly?: boolean }> = ({ 
   children, 
@@ -56,8 +57,7 @@ function AppRouter() {
     <ThemeProvider>
       <AuthProvider>
         <Router>
-                <ScrollToTop /> {/* 👈 Add this */}
-
+                <ScrollToTop /> 
           <Routes>
             {/* Redirect / → /en or /ar */}
             <Route path="/" element={<RedirectToLocale />} />

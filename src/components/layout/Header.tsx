@@ -1,6 +1,6 @@
 // src/components/Header.tsx
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom"; // ⚠️ removed unused 'redirect'
+import { Link, redirect, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Moon, Sun, Menu, X, User, LogOut } from "lucide-react";
 import { useTheme } from "../../contexts/theme-utils";
@@ -30,8 +30,7 @@ const Header: React.FC = () => {
     try {
       await signOut();
       setIsUserMenuOpen(false);
-      // ⚠️ 'redirect' is for loaders/actions — use 'navigate' instead if needed
-      // But since signOut likely triggers redirect via auth context, this is fine.
+      redirect("/");
     } catch (error) {
       console.error("Error signing out:", error);
     }
@@ -138,17 +137,21 @@ const Header: React.FC = () => {
                         className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2"
                       >
                         <LogOut className="w-4 h-4" />
+
                         <span>{t("header.auth.signOut")}</span>
+
                       </button>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
             ) : (
+
               <Link to="login">
                 <Button size="sm" className="text-base md:text-sm">
                   {t("header.auth.signIn")}
                 </Button>
+
               </Link>
             )}
 

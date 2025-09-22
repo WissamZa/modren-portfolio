@@ -42,6 +42,7 @@ const Footer: React.FC = () => {
                 return (
                   <li key={key}>
                     <Link to={key} className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+
                       {label}
                     </Link>
                   </li>
