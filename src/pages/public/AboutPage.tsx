@@ -44,14 +44,14 @@ const AboutPage: React.FC = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="py-10 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-purple-900">
+      <section className="py-10 bg-linear-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-purple-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center space-y-8 mb-16"
           >
-            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-6xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               About Me
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
@@ -69,7 +69,7 @@ const AboutPage: React.FC = () => {
               className="relative"
             >
               <div className="relative w-full max-w-md mx-auto">
-                <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-blue-400 to-purple-600 p-1">
+                <div className="aspect-square rounded-2xl overflow-hidden bg-linear-to-br from-blue-400 to-purple-600 p-1">
                   <div className="w-full h-full rounded-2xl bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
                     <img
                       src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=500"
@@ -151,7 +151,7 @@ const AboutPage: React.FC = () => {
                 className="text-center"
               >
                 <Card className="p-6 hover:shadow-xl transition-shadow duration-300">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                  <div className="w-12 h-12 bg-linear-to-r from-blue-600 to-purple-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
                     <Icon className="w-6 h-6 text-white" />
                   </div>
                   <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1">

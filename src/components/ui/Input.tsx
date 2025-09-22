@@ -36,7 +36,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             whileFocus={{ scale: 1.01 }}
             className={`
-              block w-full rounded-lg border-gray-300 shadow-sm
+              block w-full rounded-lg border-gray-300 shadow-xs
               focus:border-blue-500 focus:ring-blue-500
               dark:bg-gray-800 dark:border-gray-600 dark:text-white
               dark:focus:border-blue-400 dark:focus:ring-blue-400

@@ -81,7 +81,7 @@ const ContactPage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center space-y-8 mb-16"
         >
-          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-6xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Get In Touch
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
@@ -134,7 +134,7 @@ const ContactPage: React.FC = () => {
                     rows={6}
                     placeholder="Tell me about your project..."
                     className={`
-                      block w-full rounded-lg border-gray-300 shadow-sm
+                      block w-full rounded-lg border-gray-300 shadow-xs
                       focus:border-blue-500 focus:ring-blue-500
                       dark:bg-gray-800 dark:border-gray-600 dark:text-white
                       dark:focus:border-blue-400 dark:focus:ring-blue-400
@@ -190,7 +190,7 @@ const ContactPage: React.FC = () => {
                   whileHover={{ x: 4 }}
                   className="flex items-start space-x-4"
                 >
-                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center shrink-0">
                     <Icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
@@ -209,7 +209,7 @@ const ContactPage: React.FC = () => {
             </div>
 
             {/* Map placeholder */}
-            <Card className="p-6 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-purple-900/20">
+            <Card className="p-6 bg-linear-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-purple-900/20">
               <div className="text-center py-12">
                 <MapPin className="w-16 h-16 text-blue-600 dark:text-blue-400 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">

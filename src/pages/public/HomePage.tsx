@@ -54,7 +54,7 @@ const HomePage: React.FC = () => {
         >
           <motion.div variants={fadeInUp} className="space-y-4">
             <motion.h1
-              className="text-5xl md:text-7xl text-center font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent"
+              className="text-5xl md:text-7xl text-center font-bold bg-linear-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent"
               animate={{ backgroundPosition: ["0%", "100%", "0%"] }}
               transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
               style={{ backgroundSize: "200%", marginBottom: "2.5rem" }}
@@ -152,7 +152,7 @@ const HomePage: React.FC = () => {
                   className="group"
                 >
                   <Card glass hoverable className="p-6 text-center">
-                    <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                    <div className="w-12 h-12 bg-linear-to-r from-blue-600 to-purple-600 rounded-lg mx-auto mb-3 flex items-center justify-center">
                       <span className="text-white font-bold text-lg">
                         {skill.charAt(0)}
                       </span>
