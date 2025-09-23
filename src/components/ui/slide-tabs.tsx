@@ -54,7 +54,7 @@ export const SlideTabs = () => {
           });
         }
       }}
-      className="relative mx-auto flex w-fit rounded-full bg-white p-1 dark:border-white dark:bg-gray-900"
+      className="relative mx-auto flex w-fit rounded-full bg-white dark:border-white dark:bg-gray-900"
     >
       {navigation.map((tab, i) => (
         <Tab
@@ -76,7 +76,7 @@ export const SlideTabs = () => {
 const Tab = forwardRef<HTMLLIElement, TabProps>(
   ({ children, href, setPosition, onClick }, ref) => {
     return (
-      <Link to={href} className="w-full h-full block">
+      <Link to={href} className="w-fit block">
         <li
           ref={ref}
           onClick={onClick}
@@ -91,7 +91,7 @@ const Tab = forwardRef<HTMLLIElement, TabProps>(
               opacity: 1,
             });
           }}
-          className="relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase text-white mix-blend-difference md:px-5 md:py-3 md:text-base"
+          className="relative z-10 block cursor-pointer px-3 text-xs uppercase text-white mix-blend-difference md:px-5 md:pt-2 font-bold md:text-xs"
         >
           {children}
         </li>
@@ -112,7 +112,7 @@ const Cursor = ({ position }: CursorProps) => {
       animate={{
         ...position,
       }}
-      className="absolute z-0 h-7 rounded-full bg-black dark:bg-white md:h-12"
+      className="absolute z-0 h-5 rounded-full bg-black dark:bg-white md:h-8"
     />
   );
 };
