@@ -19,7 +19,7 @@ const NotFoundPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-600 flex items-center justify-center text-white p-4">
+    <div className="min-h-screen bg-linear-to-br from-indigo-500 via-purple-600 to-pink-600 flex items-center justify-center text-white p-4">
       <div className="text-center space-y-6">
         <h1 className="text-6xl md:text-7xl font-extrabold tracking-tight">
           404

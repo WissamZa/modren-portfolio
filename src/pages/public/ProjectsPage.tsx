@@ -66,7 +66,7 @@ const ProjectsPage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center space-y-8 mb-16"
         >
-          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-6xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             My Projects
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
@@ -141,7 +141,7 @@ const ProjectsPage: React.FC = () => {
                         alt={project.title}
                         className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                      <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                         <div className="flex space-x-2">
                           {project.demo_url && (
                             <Button
@@ -173,7 +173,7 @@ const ProjectsPage: React.FC = () => {
                           {project.title}
                         </h3>
                         {project.featured && (
-                          <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                          <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-sm dark:bg-blue-900 dark:text-blue-300">
                             Featured
                           </span>
                         )}
@@ -187,7 +187,7 @@ const ProjectsPage: React.FC = () => {
                       {project.technologies.slice(0, 3).map((tech) => (
                         <span
                           key={tech}
-                          className="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300"
+                          className="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-gray-300"
                         >
                           {tech}
                         </span>

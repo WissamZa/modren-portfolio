@@ -7,7 +7,12 @@ import { useTheme } from "../../contexts/theme-utils";
 import { useAuth } from "../../contexts/auth-utils";
 import { useTranslation } from "react-i18next";
 import Button from "../ui/Button";
+import { SlideTabs } from "../ui/slide-tabs";
 import LanguageSwitcher from "../ui/LanguageSwitcher";
+import { useNavigation } from "../../hooks/useNavigation";
+
+
+
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,15 +21,12 @@ const Header: React.FC = () => {
   const { user, isAdmin, signOut } = useAuth();
   const { t } = useTranslation();
   const location = useLocation();
+  const navigation = useNavigation();
 
-  const navigation = [
-    { name: t("header.nav.home"), href: "" },
-    { name: t("header.nav.about"), href: "about" },
-    { name: t("header.nav.projects"), href: "projects" },
-    { name: t("header.nav.contact"), href: "contact" },
-  ];
 
-  const isActive = (path: string) => location.pathname === `/${path}` || (path === "" && location.pathname === "/");
+  const isActive = (path: string) =>
+    location.pathname === `/${path}` ||
+    (path === "" && location.pathname === "/");
 
   const handleSignOut = async () => {
     try {
@@ -49,37 +51,17 @@ const Header: React.FC = () => {
             <motion.div
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.5 }}
-              className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center"
+              className="w-8 h-8 bg-linear-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center"
             >
               <span className="text-white font-bold text-lg">P</span>
             </motion.div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="text-xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Portfolio
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:grid md:grid-cols-4 gap-x-8">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className={`relative py-2 text-sm font-medium transition-colors duration-200 text-center ${
-                  isActive(item.href)
-                    ? "text-blue-600 dark:text-blue-400"
-                    : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-                }`}
-              >
-                {item.name}
-                {isActive(item.href) && (
-                  <motion.div
-                    layoutId="activeTab"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400"
-                  />
-                )}
-              </Link>
-            ))}
-          </nav>
+          <SlideTabs />
 
           {/* Right side controls — DESKTOP ONLY */}
           <div className="flex items-center space-x-4">
@@ -125,7 +107,7 @@ const Header: React.FC = () => {
                     >
                       {isAdmin && (
                         <Link
-                          to="/admin"
+                          to="admin"
                           className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
@@ -139,19 +121,16 @@ const Header: React.FC = () => {
                         <LogOut className="w-4 h-4" />
 
                         <span>{t("header.auth.signOut")}</span>
-
                       </button>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
             ) : (
-
               <Link to="login">
                 <Button size="sm" className="text-base md:text-sm">
                   {t("header.auth.signIn")}
                 </Button>
-
               </Link>
             )}
 

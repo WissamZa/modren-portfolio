@@ -1,22 +1,18 @@
+// RedirectToLocale.tsx
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import i18n from '../../i18n';
 
-const RedirectToLocale: React.FC = () => {
-  const { i18n } = useTranslation();
+const RedirectToLocale = () => {
   const navigate = useNavigate();
 
-  // Redirect immediately on render
   useEffect(() => {
-    navigate(`/${i18n.language}`, { replace: true });
-  }, [i18n.language, navigate]);
+    const detected = i18n.language || 'en';
+    const lang = ['en', 'ar'].includes(detected) ? detected : 'en';
+    navigate(`/${lang}`, { replace: true });
+  }, [navigate]);
 
-  // Show minimal loading state while redirecting
-  return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="text-gray-500">Redirecting...</div>
-    </div>
-  );
+  return null;
 };
 
 export default RedirectToLocale;

@@ -213,7 +213,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
                     Category
                   </label>
                   <select
-                    className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white p-2"
+                    className="block w-full rounded-lg border-gray-300 shadow-xs focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white p-2"
                     {...register('category')}
                   >
                     {categories.map(({ value, label }) => (
@@ -330,7 +330,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
                 rows={3}
                 placeholder="Brief description of your project..."
                 className={`
-                  block w-full rounded-lg border-gray-300 shadow-sm
+                  block w-full rounded-lg border-gray-300 shadow-xs
                   focus:border-blue-500 focus:ring-blue-500
                   dark:bg-gray-800 dark:border-gray-600 dark:text-white p-2
                   ${errors.description ? 'border-red-500' : ''}
@@ -352,7 +352,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
               <textarea
                 rows={6}
                 placeholder="Detailed description, features, technical details..."
-                className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white p-2"
+                className="block w-full rounded-lg border-gray-300 shadow-xs focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white p-2"
                 {...register('content')}
               />
             </div>

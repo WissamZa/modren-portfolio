@@ -48,7 +48,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen pb-5 pt-8 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-purple-900">
+    <div className="min-h-screen pb-5 pt-8 bg-linear-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-purple-900">
       <div className="max-w-md mx-auto px-4">
         <span></span>
         <motion.div
@@ -61,7 +61,7 @@ const LoginPage: React.FC = () => {
             <motion.div
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.5 }}
-              className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto"
+              className="w-16 h-16 bg-linear-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto"
             >
               <LogIn className="w-8 h-8 text-white" />
             </motion.div>
