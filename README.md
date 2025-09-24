@@ -34,7 +34,7 @@ cd your-repo-name
 
 2. Install dependencies:
 ```bash
-npm install
+bun install
 ```
 
 3. Set up environment variables:
@@ -50,7 +50,7 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 5. Start the development server:
 ```bash
-npm run dev
+bun run dev
 ```
 
 ## 🚀 Deployment to GitHub Pages
