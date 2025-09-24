@@ -9,6 +9,9 @@ import { useTranslation } from "react-i18next";
 import Button from "../ui/Button";
 import { SlideTabs } from "../ui/slide-tabs";
 import LanguageSwitcher from "../ui/LanguageSwitcher";
+import { useNavigation } from "../../hooks/useNavigation";
+
+
 
 
 const Header: React.FC = () => {
@@ -18,13 +21,8 @@ const Header: React.FC = () => {
   const { user, isAdmin, signOut } = useAuth();
   const { t } = useTranslation();
   const location = useLocation();
+  const navigation = useNavigation();
 
-const navigation = [
-    { name: t("header.nav.home"), href: "" },
-    { name: t("header.nav.about"), href: "about" },
-    { name: t("header.nav.projects"), href: "projects" },
-    { name: t("header.nav.contact"), href: "contact" },
-  ];
 
   const isActive = (path: string) =>
     location.pathname === `/${path}` ||

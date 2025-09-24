@@ -7,6 +7,8 @@ import Card from "../../components/ui/Card";
 import Hero from "../../components/layout/Hero";
 import HeroLayout from "../../components/layout/HeroLayout";
 import { useCurrentLanguage } from "../../hooks/useCurrentLanguage";
+import { useTranslation } from "react-i18next";
+
 const HomePage: React.FC = () => {
   const [featuresRef, featuresInView] = useInView({
     triggerOnce: true,
@@ -36,6 +38,7 @@ const HomePage: React.FC = () => {
   const skills = ["React", "TypeScript", "Node.js", "Python", "AWS", "GraphQL"];
   const currentLang = useCurrentLanguage();
 
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen">
       <HeroLayout height={800}>
@@ -54,16 +57,15 @@ const HomePage: React.FC = () => {
         >
           <motion.div variants={fadeInUp} className="space-y-4">
             <motion.h1
-              className="text-5xl md:text-7xl text-center font-bold bg-linear-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent"
+              className="text-5xl md:text-7xl text-center font-bold bg-linear-to-r py-1.5 from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent"
               animate={{ backgroundPosition: ["0%", "100%", "0%"] }}
               transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
               style={{ backgroundSize: "200%", marginBottom: "2.5rem" }}
             >
-              Creative Developer
+              {t("home.hero.title")}
             </motion.h1>
             <p className="text-xl md:text-xl text-center text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Transforming ideas into exceptional digital experiences with
-              modern technologies and innovative solutions.
+                {t("home.hero.subtitle")}
             </p>
           </motion.div>
 

@@ -1,4 +1,4 @@
-// LanguageSwitcher.tsx — FIXED
+// src/components/ui/LanguageSwitcher.tsx
 import { ChevronDown } from 'lucide-react';
 import Button from './Button';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import ReactCountryFlag from 'react-country-flag';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/auth-utils';
-import { useNavigate, useLocation } from 'react-router-dom'; // 👈 ADD THIS
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const languages = [
   { code: 'en', name: 'English', country_code: 'US' },
@@ -17,8 +17,8 @@ const languages = [
 const LanguageSwitcher: React.FC = () => {
   const { i18n } = useTranslation();
   const { user } = useAuth();
-  const navigate = useNavigate(); // 👈 ADD THIS
-  const location = useLocation(); // 👈 ADD THIS
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
   const currentLanguage = useMemo(() => {
@@ -27,52 +27,44 @@ const LanguageSwitcher: React.FC = () => {
 
   const isRTL = i18n.language === 'ar';
 
-  // 👇 FIXED: Change i18n AND update URL
-  const handleLanguageChange = async (languageCode: string) => {
-    // console.log('Changing language to:', languageCode);
+  const handleLanguageChange = (languageCode: string) => {
+    if (i18n.language === languageCode) {
+      setIsOpen(false);
+      return;
+    }
 
     // Save preference
     localStorage.setItem('i18nextLng', languageCode);
     if (user) {
-      try {
-        const { error } = await supabase
-          .from('profiles')
-          .update({ locale: languageCode })
-          .eq('id', user.id);
-        if (error) throw error;
-        // console.log('✅ Language saved to Supabase profile');
-      } catch (err) {
-        console.error('Failed to save language preference:', err);
-      }
+      supabase
+        .from('profiles')
+        .update({ locale: languageCode })
+        .eq('id', user.id)
+        .then(({ error }) => {
+          if (error) console.error('Failed to save language:', error);
+        });
     }
 
-    // 👉 STEP 1: Change i18n language
-    await i18n.changeLanguage(languageCode);
-
-    // 👉 STEP 2: Update URL — preserve current path, change lang prefix
-    const currentPath = location.pathname.replace(/^\/[a-z]{2}/, ''); // Remove /en or /ar
-    const newPath = `/${languageCode}${currentPath ? `/${currentPath}` : ''}`;
-
-    // 👉 STEP 3: Navigate to new path — this triggers React Router to re-render
-    navigate(newPath + location.search + location.hash);
+    // ✅ Extract current path segments
+    const segments = location.pathname.split('/').filter(Boolean);
+    // Replace first segment (lang) with new language
+    segments[0] = languageCode;
+    const newPath = `/${segments.join('/')}${location.search}${location.hash}`;
 
     setIsOpen(false);
+    navigate(newPath, { replace: true });
+    // i18n will be updated by Layout via useEffect
   };
 
   // Sync HTML attributes
   useEffect(() => {
-    const updateHtmlAttributes = () => {
-      const htmlElement = document.documentElement;
-      htmlElement.lang = i18n.language;
-      htmlElement.dir = i18n.dir();
+    const update = () => {
+      document.documentElement.lang = i18n.language;
+      document.documentElement.dir = i18n.dir();
     };
-
-    updateHtmlAttributes();
-    i18n.on('languageChanged', updateHtmlAttributes);
-
-    return () => {
-      i18n.off('languageChanged', updateHtmlAttributes);
-    };
+    update();
+    i18n.on('languageChanged', update);
+    return () => void i18n.off('languageChanged', update);
   }, [i18n]);
 
   return (
@@ -81,35 +73,23 @@ const LanguageSwitcher: React.FC = () => {
         variant="ghost"
         size="sm"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 p-2"
+        className="flex items-center space-x-2 p-2 rtl:space-x-reverse"
         aria-label="Change language"
       >
         <ReactCountryFlag
-          key={i18n.language}
           countryCode={currentLanguage.country_code}
           svg
-          style={{
-            width: '1.2em',
-            height: '1.2em',
-            borderRadius: '3px',
-            objectFit: 'cover',
-          }}
+          style={{ width: '1.2em', height: '1.2em', borderRadius: '3px' }}
           title={currentLanguage.name}
         />
-        <span className='pr-2'>{currentLanguage.name}</span>
-        <ChevronDown
-          className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-          style={{ transform: isRTL && isOpen ? 'rotate(180deg) scaleX(-1)' : undefined }}
-        />
+        <span className="pr-2">{currentLanguage.name}</span>
+        <ChevronDown className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </Button>
 
       <AnimatePresence>
         {isOpen && (
           <>
-            <div
-              className="fixed inset-0 z-40"
-              onClick={() => setIsOpen(false)}
-            />
+            <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: -10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -121,33 +101,27 @@ const LanguageSwitcher: React.FC = () => {
               `}
               dir="ltr"
             >
-              {languages.map((language) => (
+              {languages.map((lang) => (
                 <button
-                  key={language.code}
-                  onClick={() => handleLanguageChange(language.code)}
+                  key={lang.code}
+                  onClick={() => handleLanguageChange(lang.code)}
                   className={`
                     w-full text-left px-4 py-2 text-sm transition-colors duration-200
                     flex items-center space-x-3
-                    ${i18n.language === language.code
+                    ${i18n.language === lang.code
                       ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                     }
                   `}
-                  lang={language.code}
-                  dir="auto"
                 >
                   <ReactCountryFlag
-                    countryCode={language.country_code}
+                    countryCode={lang.country_code}
                     svg
-                    style={{
-                      width: '1.5em',
-                      height: '1.2em',
-                      borderRadius: '3px',
-                    }}
-                    title={language.name}
+                    style={{ width: '1.5em', height: '1.2em', borderRadius: '3px' }}
+                    title={lang.name}
                   />
-                  <span>{language.name}</span>
-                  {i18n.language === language.code && (
+                  <span>{lang.name}</span>
+                  {i18n.language === lang.code && (
                     <div className="ml-auto w-2 h-2 bg-blue-600 rounded-full" />
                   )}
                 </button>

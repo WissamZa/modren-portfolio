@@ -15,6 +15,21 @@
       "signOut": "Sign Out"
     }
   },
+  "home": {
+    "hero": {
+      "title": "Creative Developer",
+      "subtitle": "Building innovative digital solutions with passion and precision."
+    },
+    "features": {
+      "title": "Features",
+      "description": "Explore the cutting-edge technologies and tools I specialize in to bring your ideas to life."
+    },
+    "skills": {
+      "title": "Skills",
+      "description": "A diverse set of skills that empower me to create exceptional digital experiences."
+    }
+  },
+  
   "footer": {
     "description": "Crafting digital experiences with modern technologies and creative solutions.",
     "socialLinks": {
