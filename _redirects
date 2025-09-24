@@ -1,0 +1,4 @@
+# Netlify redirects for SPA
+/*    /index.html   200
+
+# GitHub Pages doesn't support this file, but keeping for other deployments

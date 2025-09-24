@@ -1,0 +1,81 @@
+name: CI/CD - Test on Develop, Deploy on Main via PR
+
+on:
+  push:
+    branches: [ develop ]  # Only allow push to develop, not main
+  pull_request:
+    branches: [ develop, main ]  # Trigger on PRs to either
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Run Tests and Lint
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/develop') ||
+      (github.event_name == 'pull_request' && github.base_ref == 'develop') ||
+      (github.event_name == 'pull_request' && github.base_ref == 'main' && github.head_ref == 'develop')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest  # or pin to a specific version like '1.0.0'
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run tests
+        run: bun test
+
+      - name: Run lint
+        run: bun run lint
+
+      - name: Run type check (TypeScript)
+        run: bun run type-check
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    name: Build and Deploy to GitHub Pages (Main Branch via PR from develop)
+    if: |
+      github.event_name == 'pull_request' &&
+      github.base_ref == 'main' &&
+      github.head_ref == 'develop'
+    needs: test  # Wait for test job to pass
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build app (Vite)
+        run: bun run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
