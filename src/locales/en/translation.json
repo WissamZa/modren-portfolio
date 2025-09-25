@@ -26,7 +26,8 @@
     },
     "skills": {
       "title": "Skills",
-      "description": "A diverse set of skills that empower me to create exceptional digital experiences."
+      "description": "A diverse set of skills that empower me to create exceptional digital experiences.",
+      "list": ["React", "TypeScript", "Node.js", "Python", "AWS", "GraphQL"]
     }
   },
   

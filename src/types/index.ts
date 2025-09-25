@@ -54,3 +54,5 @@ export interface SiteSettings {
   };
   updated_at: string;
 }
+
+export type Skills = string[];
