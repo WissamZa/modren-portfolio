@@ -30,6 +30,17 @@
       "list": ["React", "TypeScript", "Node.js", "Python", "AWS", "GraphQL"]
     }
   },
+  "projects": {
+    "title": "المشاريع",
+    "description": "عرض لأحدث أعمالي، يوضح خبرتي في تطوير وتصميم الويب.",
+    "techused": "التقنيات المستخدمة",
+    "viewDemo": "عرض تجريبي",
+    "viewCode": "عرض الكود",
+    "viewDetails": "المحتوى التفصيلي",
+    "noProjects": "لا توجد مشاريع متاحة.",
+    "CfirstProject": "أنشئ مشروعك الأول للبدء."
+  },
+  
   "footer": {
     "description": "انشاء تجارب رقمية باستخدام تقنيات حديثة وحلول إبداعية.",
     "socialLinks": {

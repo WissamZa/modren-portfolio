@@ -4,6 +4,7 @@ import { X, ExternalLink, Github, Calendar, Tag, Star } from 'lucide-react';
 import { Project } from '../../types/index';
 import Button from '../ui/Button';
 import Card from '../ui/Card';
+import { t } from 'i18next';
 
 interface ProjectViewProps {
   project: Project;
@@ -96,10 +97,10 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onEdit }) =
           {/* Description */}
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              Description
+              {t('projects.description')}
             </h3>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-              {project.description}
+              {t('projects.description')}
             </p>
           </div>
 
@@ -107,7 +108,7 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onEdit }) =
           {project.content && (
             <div className="mb-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Detailed Content
+                {t('projects.viewDetails')}
               </h3>
               <div className="prose dark:prose-invert max-w-none">
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
@@ -120,7 +121,7 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onEdit }) =
           {/* Technologies */}
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-              Technologies Used
+              {t('projects.techused')}
             </h3>
             <div className="flex flex-wrap gap-2">
               {project.technologies.map((tech) => (
@@ -147,7 +148,7 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onEdit }) =
                     className="flex items-center space-x-2"
                   >
                     <ExternalLink className="w-4 h-4" />
-                    <span>View Demo</span>
+                    <span>{t('projects.viewDemo')}</span>
                   </Button>
                 )}
                 {project.github_url && (
@@ -157,7 +158,7 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onEdit }) =
                     className="flex items-center space-x-2"
                   >
                     <Github className="w-4 h-4" />
-                    <span>View Code</span>
+                    <span>{t('projects.viewCode')}</span>
                   </Button>
                 )}
               </div>

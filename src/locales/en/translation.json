@@ -30,6 +30,16 @@
       "list": ["React", "TypeScript", "Node.js", "Python", "AWS", "GraphQL"]
     }
   },
+  "projects": {
+    "title": "My Projects",
+    "description": "A collection of projects showcasing my expertise in modern web development, from interactive applications to complex systems.",
+    "techused": "Technologies Used",
+    "viewDemo": "View Demo",
+    "viewCode": "View Code",
+    "viewDetails": "Detailed Content",
+    "noProjects": "No projects available.",
+    "CfirstProject": "Create your first project to get started."
+  },
   
   "footer": {
     "description": "Crafting digital experiences with modern technologies and creative solutions.",

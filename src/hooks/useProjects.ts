@@ -18,18 +18,15 @@ export const useProjects = () => {
         .select("*")
         .order("created_at", { ascending: false });
 
-      // console.log("📡 Response:", { data, error }); // 👈 ADD THIS
 
       if (error) throw error;
       setProjects(data || []);
-      // console.log("✅ Projects loaded:", data?.length || 0);
     } catch (err) {
       console.error("❌ Error fetching projects:", err); // 👈 ADD THIS
       setError(err instanceof Error ? err.message : "An error occurred");
       toast.error("Failed to fetch projects");
     } finally {
       setLoading(false);
-      // console.log("⏹️ Loading finished"); // 👈 ADD THIS
     }
   };
   const createProject = async (

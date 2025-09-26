@@ -4,6 +4,7 @@ import { ExternalLink, Github, Filter } from "lucide-react";
 import { useProjects } from "../../hooks/useProjects";
 import Card from "../../components/ui/Card";
 import Button from "../../components/ui/Button";
+import i18next, { t } from "i18next";
 
 const ProjectsPage: React.FC = () => {
   const { projects, loading } = useProjects();
@@ -29,7 +30,11 @@ const ProjectsPage: React.FC = () => {
       },
     },
   };
+  const isArabic = i18next.language === 'ar'; // assuming you have currentLanguage state/prop
 
+const projectText = isArabic 
+  ? (filteredProjects.length === 1 ? 'مشروع' : 'مشاريع')
+  : (filteredProjects.length === 1 ? 'project' : 'projects');
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -66,12 +71,11 @@ const ProjectsPage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center space-y-8 mb-16"
         >
-          <h1 className="text-4xl md:text-6xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            My Projects
+          <h1 className="text-4xl md:text-6xl pb-1.5 font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            {t('projects.title')}
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            A collection of projects showcasing my expertise in modern web
-            development, from interactive applications to complex systems.
+            {t('projects.description')}
           </p>
         </motion.div>
 
@@ -113,8 +117,7 @@ const ProjectsPage: React.FC = () => {
           </div>
 
           <p className="text-gray-600 dark:text-gray-400">
-            {filteredProjects.length} project
-            {filteredProjects.length !== 1 ? "s" : ""}
+            {projectText } ({filteredProjects.length})
           </p>
         </motion.div>
 
