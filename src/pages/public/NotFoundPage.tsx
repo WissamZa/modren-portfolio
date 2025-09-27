@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
+import i18next from 'i18next';
 
 /**
  * 404 Page Component - Shown when route is not found
  */
+const isArabic = i18next.language === 'ar'; // assuming you have currentLanguage state/prop
+const notfound = isArabic ? 'الصفحة غير موجودة' : 'Page not found';
+const homebtn = isArabic ? 'الصفحة الرئيسية' : 'Home';
 const NotFoundPage = () => {
   // Handle redirect persistence for SPA behavior
   useEffect(() => {
@@ -25,14 +29,14 @@ const NotFoundPage = () => {
           404
         </h1>
         <p className="text-xl md:text-2xl opacity-90">
-          Page not found
+          {notfound}
         </p>
         <Link
           to="/"
           className="inline-block px-8 py-3 bg-white/20 hover:bg-white/30 border border-white/30 hover:-translate-y-1 rounded-full font-medium transition-all duration-300 backdrop-blur-sm"
           aria-label="Go to homepage"
         >
-          Go Home
+          {homebtn}
         </Link>
       </div>
     </div>
