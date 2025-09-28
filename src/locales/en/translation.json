@@ -28,7 +28,10 @@
       "title": "Skills",
       "description": "A diverse set of skills that empower me to create exceptional digital experiences.",
       "list": ["React", "TypeScript", "Node.js", "Python", "AWS", "GraphQL"]
-    }
+    },
+    "viewWork": "View My Work",
+    "downloadResume": "Download Resume"
+
   },
   "projects": {
     "title": "My Projects",

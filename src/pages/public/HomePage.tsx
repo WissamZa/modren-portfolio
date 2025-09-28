@@ -83,7 +83,7 @@ const HomePage: React.FC = () => {
                                     currentLang === "ar" ? "flex-row-reverse" : ""
                                 }`}
                             >
-                                View My Work
+                                {t("home.viewWork")}
                                 <ArrowRight className="w-5 h-5 mx-2 group-hover:translate-x-1 transition-transform"/>
                             </Button>
                         </Link>
@@ -94,7 +94,7 @@ const HomePage: React.FC = () => {
                         >
                             <Button variant="secondary" size="lg" className="group">
                                 <Download className="w-5 h-5 mx-2"/>
-                                Download Resume
+                                {t("home.downloadResume")}
                             </Button>
                         </a>
                     </motion.div>
